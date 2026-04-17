@@ -1,0 +1,66 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import connectToDatabase from "@/app/utils/configue/db";
+import userModel from "@/app/utils/models/userModel";
+import "@/app/utils/models/bookingModel"; // âœ… Import to register schema
+import "@/app/utils/models/productModel"; // âœ… Import to register Product schema
+import UsersClient from "./UsersClient";
+import AdminNav from "../../components/AdminNav";
+
+const GetUsers = async () => {
+  // 1ï¸âƒ£ Get session
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-luxury-cream px-4">
+        <div className="luxury-surface max-w-md p-8 text-center">
+          <p className="text-lg text-luxury-charcoal/85">Unauthorized — Please log in</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 2ï¸âƒ£ Only admin can access
+  if (session.user.role !== "admin") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-luxury-cream px-4">
+        <div className="luxury-surface max-w-md p-8 text-center">
+          <p className="text-lg text-luxury-charcoal/85">Access Denied — Admin only</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 3ï¸âƒ£ Connect DB
+  await connectToDatabase();
+
+  // 4ï¸âƒ£ Fetch users + FULL booking details
+  const users = await userModel
+    .find({ role: "user" })
+    .select("-password")
+    .populate({
+      path: "bookings",
+      model: "booking", // âœ… Match your model name
+      populate: {
+        path: "resortRoom",
+        model: "Product"
+      }
+    })
+    .lean();
+
+  // 5ï¸âƒ£ Serialize data for client (convert MongoDB objects to plain objects)
+  const serializedUsers = JSON.parse(JSON.stringify(users));
+
+  return (
+    <div className="flex flex-col min-h-screen bg-luxury-cream md:flex-row">
+      <AdminNav userName={session.user.name} />
+      <main className="flex-1 overflow-auto">
+        <UsersClient users={serializedUsers} />
+      </main>
+    </div>
+  );
+};
+
+export default GetUsers;
+
