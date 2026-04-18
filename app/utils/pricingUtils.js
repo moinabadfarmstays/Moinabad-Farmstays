@@ -3,17 +3,17 @@
  * ───────────────
  * Pure helpers for date-based pricing.
  *
- * Weekend definition: Friday, Saturday, Sunday check-in nights.
+ * Weekend definition: Saturday & Sunday check-in nights only.
  * The "night" is attributed to the day you CHECK IN (startDate).
  */
 
 /**
- * Returns true if the given date is Fri / Sat / Sun.
+ * Returns true if the given date is Saturday or Sunday.
  * @param {Date} date
  */
 export function isWeekendDay(date) {
   const day = date.getDay(); // 0=Sun, 1=Mon, …, 5=Fri, 6=Sat
-  return day === 0 || day === 5 || day === 6;
+  return day === 0 || day === 6; // Sat (6) or Sun (0) only
 }
 
 /**

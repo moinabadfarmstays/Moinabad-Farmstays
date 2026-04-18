@@ -178,89 +178,89 @@ const SectionedResorts = () => {
     );
   }
 
-  return (
-    <section className="mt-16 border-t border-luxury-stone/40 pt-12">
-      {/* Section Header */}
-      <div className="mb-8">
-        <h2 className="font-display text-3xl font-semibold text-luxury-black sm:text-4xl">
-          All Resorts
-        </h2>
-        <p className="mt-2 text-luxury-charcoal/70">
-          Browse by availability — color codes tell you everything at a glance.
-        </p>
+  // return (
+  //   <section className="mt-16 border-t border-luxury-stone/40 pt-12">
+  //     {/* Section Header */}
+  //     <div className="mb-8">
+  //       {/* <h2 className="font-display text-3xl font-semibold text-luxury-black sm:text-4xl">
+  //         All Resorts
+  //       </h2>
+  //       <p className="mt-2 text-luxury-charcoal/70">
+  //         Browse by availability — color codes tell you everything at a glance.
+  //       </p> */}
 
-        {/* Legend */}
-        <div className="mt-4 flex flex-wrap gap-3">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-            <CheckCircle className="h-3.5 w-3.5" /> Available
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
-            <Clock className="h-3.5 w-3.5" /> Pending Approval
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
-            <XCircle className="h-3.5 w-3.5" /> Booked
-          </span>
-        </div>
-      </div>
+  //       {/* Legend */}
+  //       {/* <div className="mt-4 flex flex-wrap gap-3">
+  //         <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+  //           <CheckCircle className="h-3.5 w-3.5" /> Available
+  //         </span>
+  //         <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+  //           <Clock className="h-3.5 w-3.5" /> Pending Approval
+  //         </span>
+  //         <span className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
+  //           <XCircle className="h-3.5 w-3.5" /> Booked
+  //         </span>
+  //       </div> */}
+  //     </div>
 
-      {/* Tab Bar */}
-      <div className="mb-8 flex flex-wrap gap-2">
-        {tabs.map((t) => (
-          <button
-            key={t.key}
-            type="button"
-            onClick={() => setActiveTab(t.key)}
-            className={`rounded-2xl px-5 py-2.5 text-sm font-semibold transition-all duration-200 ${
-              activeTab === t.key
-                ? "bg-luxury-black text-luxury-gold-light shadow-luxury scale-[1.03]"
-                : "border border-luxury-stone bg-white/95 text-luxury-charcoal hover:border-luxury-gold/40 hover:bg-luxury-sand/70"
-            }`}
-          >
-            {t.label}
-            <span
-              className={`ml-2 rounded-full px-2 py-0.5 text-xs ${
-                activeTab === t.key
-                  ? "bg-luxury-gold/20 text-luxury-gold-light"
-                  : "bg-luxury-stone/60 text-luxury-charcoal/70"
-              }`}
-            >
-              {t.count}
-            </span>
-          </button>
-        ))}
-      </div>
+  //     {/* Tab Bar */}
+  //     {/* <div className="mb-8 flex flex-wrap gap-2">
+  //       {tabs.map((t) => (
+  //         <button
+  //           key={t.key}
+  //           type="button"
+  //           onClick={() => setActiveTab(t.key)}
+  //           className={`rounded-2xl px-5 py-2.5 text-sm font-semibold transition-all duration-200 ${
+  //             activeTab === t.key
+  //               ? "bg-luxury-black text-luxury-gold-light shadow-luxury scale-[1.03]"
+  //               : "border border-luxury-stone bg-white/95 text-luxury-charcoal hover:border-luxury-gold/40 hover:bg-luxury-sand/70"
+  //           }`}
+  //         >
+  //           {t.label}
+  //           <span
+  //             className={`ml-2 rounded-full px-2 py-0.5 text-xs ${
+  //               activeTab === t.key
+  //                 ? "bg-luxury-gold/20 text-luxury-gold-light"
+  //                 : "bg-luxury-stone/60 text-luxury-charcoal/70"
+  //             }`}
+  //           >
+  //             {t.count}
+  //           </span>
+  //         </button>
+  //       ))}
+  //     </div> */}
 
-      {/* Grid */}
-      <AnimatePresence mode="wait">
-        {displayed.length === 0 ? (
-          <motion.div
-            key="empty"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="rounded-2xl border border-luxury-stone/80 bg-white/95 p-12 text-center shadow-glass"
-          >
-            <p className="text-luxury-charcoal/60">
-              No resorts in this category yet.
-            </p>
-          </motion.div>
-        ) : (
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
-          >
-            {displayed.map((resort) => (
-              <MiniResortCard key={resort._id} resort={resort} />
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </section>
-  );
+  //     {/* Grid */}
+  //     {/* <AnimatePresence mode="wait">
+  //       {displayed.length === 0 ? (
+  //         <motion.div
+  //           key="empty"
+  //           initial={{ opacity: 0 }}
+  //           animate={{ opacity: 1 }}
+  //           exit={{ opacity: 0 }}
+  //           className="rounded-2xl border border-luxury-stone/80 bg-white/95 p-12 text-center shadow-glass"
+  //         >
+  //           <p className="text-luxury-charcoal/60">
+  //             No resorts in this category yet.
+  //           </p>
+  //         </motion.div>
+  //       ) : (
+  //         <motion.div
+  //           key={activeTab}
+  //           initial={{ opacity: 0, y: 8 }}
+  //           animate={{ opacity: 1, y: 0 }}
+  //           exit={{ opacity: 0 }}
+  //           transition={{ duration: 0.25 }}
+  //           className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+  //         >
+  //           {displayed.map((resort) => (
+  //             <MiniResortCard key={resort._id} resort={resort} />
+  //           ))}
+  //         </motion.div>
+  //       )}
+  //     </AnimatePresence> */}
+  //   </section>
+  // );
 };
 
 // ─── Main Export ───────────────────────────────────────────────────────────────

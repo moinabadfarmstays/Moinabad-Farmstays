@@ -321,7 +321,7 @@ const AddProduct = () => {
 
             {/* Weekend row */}
             <div>
-              <p className="mb-2 text-xs font-bold uppercase tracking-wide text-amber-600">Weekend (Fri / Sat / Sun)</p>
+              <p className="mb-2 text-xs font-bold uppercase tracking-wide text-amber-600">Weekend (Sat / Sun)</p>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="luxury-label">Weekend 24hr (₹)</label>
@@ -348,7 +348,7 @@ const AddProduct = () => {
 
             {/* Weekday row */}
             <div>
-              <p className="mb-2 text-xs font-bold uppercase tracking-wide text-blue-600">Weekday (Mon – Thu)</p>
+              <p className="mb-2 text-xs font-bold uppercase tracking-wide text-blue-600">Weekday (Mon – Fri)</p>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="luxury-label">Weekday 24hr (₹)</label>

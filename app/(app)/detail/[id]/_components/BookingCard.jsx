@@ -94,21 +94,21 @@ function PricingTable({ pricing }) {
   const rows = [
     {
       icon: <Sun className="h-3.5 w-3.5 text-amber-500" />,
-      label: "Weekend (Fri–Sun)",
+      label: "Weekend (Sat–Sun)",
       duration: "24 hrs",
       price: pricing.weekendFullDay,
       accent: "bg-amber-50 border-amber-200 text-amber-800",
     },
     {
       icon: <Moon className="h-3.5 w-3.5 text-blue-500" />,
-      label: "Weekday (Mon–Thu)",
+      label: "Weekday (Mon–Fri)",
       duration: "24 hrs",
       price: pricing.weekdayFullDay,
       accent: "bg-blue-50 border-blue-200 text-blue-800",
     },
     {
       icon: <Clock className="h-3.5 w-3.5 text-emerald-500" />,
-      label: "Weekday (Mon–Thu)",
+      label: "Weekday (Mon–Fri)",
       duration: "12 hrs",
       price: pricing.weekdayHalfDay,
       accent: "bg-emerald-50 border-emerald-200 text-emerald-800",

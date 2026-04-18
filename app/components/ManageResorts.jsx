@@ -737,7 +737,7 @@ const EditResortModal = ({ resort, onClose, onSave }) => {
 
               {/* Weekend */}
               <div>
-                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-amber-600">Weekend (Fri / Sat / Sun)</p>
+                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-amber-600">Weekend (Sat / Sun)</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="luxury-label">Weekend 24hr (₹)</label>
@@ -764,7 +764,7 @@ const EditResortModal = ({ resort, onClose, onSave }) => {
 
               {/* Weekday */}
               <div>
-                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-blue-600">Weekday (Mon – Thu)</p>
+                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-blue-600">Weekday (Mon – Fri)</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="luxury-label">Weekday 24hr (₹)</label>

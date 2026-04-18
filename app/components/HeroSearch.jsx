@@ -55,7 +55,7 @@ export default function HeroSearch({
           </p>
         </motion.div>
 
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
@@ -128,7 +128,7 @@ export default function HeroSearch({
               </div>
             </div>
           </div>
-        </motion.div>
+        </motion.div> */}
 
         {/* ── Explore Stays CTA ── */}
         <motion.div

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -79,9 +79,8 @@ const ResortCard = ({ item, featured = false }) => {
           {displayImages.map((img, idx) => (
             <div
               key={idx}
-              className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
-                idx === currentImageIndex ? "z-10 opacity-100" : "z-0 opacity-0"
-              }`}
+              className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${idx === currentImageIndex ? "z-10 opacity-100" : "z-0 opacity-0"
+                }`}
             >
               <Image
                 src={img}
@@ -129,11 +128,10 @@ const ResortCard = ({ item, featured = false }) => {
                       type="button"
                       onClick={(e) => goToImage(e, idx)}
                       aria-label={`Go to image ${idx + 1}`}
-                      className={`rounded-full transition-all duration-300 ${
-                        idx === currentImageIndex
+                      className={`rounded-full transition-all duration-300 ${idx === currentImageIndex
                           ? "h-2 w-5 bg-luxury-gold-light shadow-[0_0_6px_rgba(212,175,55,0.6)]"
                           : "h-2 w-2 bg-white/60 hover:bg-white"
-                      }`}
+                        }`}
                     />
                   ))}
                 </div>
@@ -153,9 +151,9 @@ const ResortCard = ({ item, featured = false }) => {
               <span>{item.address}</span>
             </div>
 
-            <p className="mb-4 line-clamp-2 text-sm text-luxury-charcoal/80">
+            {/* <p className="mb-4 line-clamp-2 text-sm text-luxury-charcoal/80">
               {item.desc}
-            </p>
+            </p> */}
 
             {item.amen && item.amen.length > 0 && (
               <div className="flex flex-wrap gap-2">
@@ -182,7 +180,7 @@ const ResortCard = ({ item, featured = false }) => {
                 ₹{item.price.toLocaleString()}
               </p>
               <p className="text-xs text-luxury-charcoal/60">per night</p>
-              
+
               {/* Availability Status Indicator */}
               {item.available === false ? (
                 <div className="mt-2 text-xs font-semibold">
@@ -240,6 +238,337 @@ const ResortCard = ({ item, featured = false }) => {
         </div>
       </div>
     </motion.div>
+  );
+};
+
+// ─── FeaturedCarousel ────────────────────────────────────────────────────────
+// Mobile: scroll-snap, 1 card at a time with peek effect + animated nav
+// Desktop (sm+): standard 4-col grid
+
+// ─── Auto-scroll interval (ms) ───────────────────────────────────────────────
+const CAROUSEL_INTERVAL = 8000;
+
+const FeaturedCarousel = ({ items }) => {
+  const trackRef = useRef(null);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [showHint, setShowHint] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
+  // Desktop: track which "page" (group of 4) is visible
+  const [desktopPage, setDesktopPage] = useState(0);
+  const total = items.length;
+  const DESKTOP_PAGE_SIZE = 4;
+  const desktopPageCount = Math.ceil(total / DESKTOP_PAGE_SIZE);
+
+  // Scroll to a specific card by index (mobile)
+  const scrollToCard = (idx) => {
+    const track = trackRef.current;
+    if (!track) return;
+    // Card width = 82% of container; gap = 12px
+    const cardWidth = track.offsetWidth * 0.82 + 12;
+    track.scrollTo({ left: idx * cardWidth, behavior: "smooth" });
+  };
+
+  const prev = () => {
+    const n = Math.max(0, activeIdx - 1);
+    setActiveIdx(n);
+    scrollToCard(n);
+  };
+
+  const next = () => {
+    const n = Math.min(total - 1, activeIdx + 1);
+    setActiveIdx(n);
+    scrollToCard(n);
+  };
+
+  // Sync active index while user manually swipes
+  const onScroll = () => {
+    const track = trackRef.current;
+    if (!track) return;
+    setShowHint(false);
+    const cardWidth = track.offsetWidth * 0.82 + 12;
+    const idx = Math.round(track.scrollLeft / cardWidth);
+    setActiveIdx(Math.min(total - 1, Math.max(0, idx)));
+  };
+
+  // ── Auto-scroll every 8 seconds ─────────────────────────────────────────────
+  useEffect(() => {
+    if (isPaused || total <= 1) return;
+    const timer = setInterval(() => {
+      // Mobile: advance to next card, wrap around
+      setActiveIdx((prev) => {
+        const next = prev >= total - 1 ? 0 : prev + 1;
+        scrollToCard(next);
+        return next;
+      });
+      // Desktop: advance to next page, wrap around
+      setDesktopPage((prev) =>
+        prev >= desktopPageCount - 1 ? 0 : prev + 1
+      );
+    }, CAROUSEL_INTERVAL);
+    return () => clearInterval(timer);
+  }, [isPaused, total, desktopPageCount]);
+
+  // Auto-hide swipe hint after 2.5 s
+  useEffect(() => {
+    const t = setTimeout(() => setShowHint(false), 2500);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Items visible on desktop for the current page
+  const desktopItems = items.slice(
+    desktopPage * DESKTOP_PAGE_SIZE,
+    desktopPage * DESKTOP_PAGE_SIZE + DESKTOP_PAGE_SIZE
+  );
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="mb-12"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {/* ── Header ── */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="font-display text-2xl font-semibold text-luxury-black">
+            Featured resorts
+          </h2>
+          <p className="mt-1 text-sm text-luxury-charcoal/70">
+            Handpicked properties from our collection.
+          </p>
+        </div>
+
+        {/* Desktop page controls */}
+        {desktopPageCount > 1 && (
+          <div className="hidden sm:flex items-center gap-3">
+            {/* Progress dots */}
+            <div className="flex items-center gap-1.5">
+              {Array.from({ length: desktopPageCount }).map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  aria-label={`Go to page ${i + 1}`}
+                  onClick={() => setDesktopPage(i)}
+                >
+                  <motion.span
+                    animate={{
+                      width: i === desktopPage ? 22 : 7,
+                      backgroundColor:
+                        i === desktopPage ? "#c8a951" : "#c8a95166",
+                    }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="block h-2 rounded-full"
+                    style={{ width: 7, backgroundColor: "#c8a95166" }}
+                  />
+                </button>
+              ))}
+            </div>
+            <motion.button
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.92 }}
+              onClick={() =>
+                setDesktopPage((p) => Math.max(0, p - 1))
+              }
+              disabled={desktopPage === 0}
+              aria-label="Previous page"
+              className={`flex h-9 w-9 items-center justify-center rounded-full shadow-md transition-all ${
+                desktopPage === 0
+                  ? "border border-luxury-stone/40 bg-white/60 opacity-40 cursor-not-allowed"
+                  : "border border-luxury-gold/50 bg-luxury-gold/10 text-luxury-gold-dark hover:bg-luxury-gold/20"
+              }`}
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.92 }}
+              onClick={() =>
+                setDesktopPage((p) =>
+                  Math.min(desktopPageCount - 1, p + 1)
+                )
+              }
+              disabled={desktopPage === desktopPageCount - 1}
+              aria-label="Next page"
+              className={`flex h-9 w-9 items-center justify-center rounded-full shadow-md transition-all ${
+                desktopPage === desktopPageCount - 1
+                  ? "border border-luxury-stone/40 bg-white/60 opacity-40 cursor-not-allowed"
+                  : "border border-luxury-gold/50 bg-luxury-gold/10 text-luxury-gold-dark hover:bg-luxury-gold/20"
+              }`}
+            >
+              <ChevronRight className="h-5 w-5" />
+            </motion.button>
+          </div>
+        )}
+
+        {/* Arrow buttons — top-right, mobile only */}
+        <div className="flex items-center gap-2 sm:hidden">
+          <motion.button
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
+            onClick={prev}
+            disabled={activeIdx === 0}
+            aria-label="Previous resort"
+            className={`flex h-9 w-9 items-center justify-center rounded-full shadow-md transition-all ${
+              activeIdx === 0
+                ? "border border-luxury-stone/40 bg-white/60 opacity-40 cursor-not-allowed"
+                : "border border-luxury-gold/50 bg-luxury-gold/10 text-luxury-gold-dark hover:bg-luxury-gold/20"
+            }`}
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
+            onClick={next}
+            disabled={activeIdx === total - 1}
+            aria-label="Next resort"
+            className={`flex h-9 w-9 items-center justify-center rounded-full shadow-md transition-all ${
+              activeIdx === total - 1
+                ? "border border-luxury-stone/40 bg-white/60 opacity-40 cursor-not-allowed"
+                : "border border-luxury-gold/50 bg-luxury-gold/10 text-luxury-gold-dark hover:bg-luxury-gold/20"
+            }`}
+          >
+            <ChevronRight className="h-5 w-5" />
+          </motion.button>
+        </div>
+      </div>
+
+      {/* ── Animated swipe hint ── */}
+      <AnimatePresence>
+        {showHint && (
+          <motion.div
+            key="hint"
+            initial={{ opacity: 0, x: -4 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -4 }}
+            className="mt-3 sm:hidden"
+          >
+            <motion.span
+              animate={{ x: [0, 8, 0] }}
+              transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
+              className="inline-flex items-center gap-1.5 rounded-full border border-luxury-gold/40 bg-luxury-gold/10 px-3 py-1 text-[11px] font-semibold text-luxury-gold-dark tracking-wide"
+            >
+              <ChevronRight className="h-3 w-3" />
+              Swipe for more resorts
+            </motion.span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Desktop grid (sm+) — animated page transitions ── */}
+      <div className="mt-5 hidden sm:block">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={desktopPage}
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -40 }}
+            transition={{ duration: 0.45, ease: "easeInOut" }}
+            className="grid sm:grid-cols-2 sm:gap-4 lg:grid-cols-4"
+          >
+            {desktopItems.map((item) => (
+              <ResortCard key={item._id} item={item} />
+            ))}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Auto-scroll progress bar */}
+        {!isPaused && total > DESKTOP_PAGE_SIZE && (
+          <motion.div
+            key={desktopPage + "-progress"}
+            className="mt-4 h-0.5 w-full overflow-hidden rounded-full bg-luxury-stone/30"
+          >
+            <motion.div
+              className="h-full rounded-full bg-luxury-gold/60"
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{ duration: CAROUSEL_INTERVAL / 1000, ease: "linear" }}
+            />
+          </motion.div>
+        )}
+      </div>
+
+      {/* ── Mobile one-card carousel ── */}
+      <div className="relative mt-5 sm:hidden overflow-hidden">
+
+        {/* Right peek gradient — strong signal there is a next card */}
+        <div className="pointer-events-none absolute right-0 top-0 z-20 h-full w-14 bg-gradient-to-l from-luxury-cream via-luxury-cream/60 to-transparent" />
+        {/* Left peek gradient */}
+        <div className="pointer-events-none absolute left-0 top-0 z-20 h-full w-6 bg-gradient-to-r from-luxury-cream/80 to-transparent" />
+
+        <div
+          ref={trackRef}
+          onScroll={onScroll}
+          className="flex overflow-x-auto pb-4 hide-scrollbar"
+          style={{ scrollSnapType: "x mandatory", gap: "12px" }}
+        >
+          {items.map((item, i) => (
+            <motion.div
+              key={item._id}
+              animate={{
+                opacity: i === activeIdx ? 1 : 0.5,
+                scale: i === activeIdx ? 1 : 0.94,
+              }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              className="shrink-0"
+              style={{ scrollSnapAlign: "center", width: "82%" }}
+            >
+              <ResortCard item={item} />
+            </motion.div>
+          ))}
+          {/* Leading + trailing spacers for centering first/last card */}
+          <div className="shrink-0" style={{ width: "9%" }} />
+        </div>
+
+        {/* Mobile auto-scroll progress bar */}
+        {!isPaused && total > 1 && (
+          <motion.div
+            key={activeIdx + "-mob-progress"}
+            className="mt-1 mx-4 h-0.5 overflow-hidden rounded-full bg-luxury-stone/30"
+          >
+            <motion.div
+              className="h-full rounded-full bg-luxury-gold/60"
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{ duration: CAROUSEL_INTERVAL / 1000, ease: "linear" }}
+            />
+          </motion.div>
+        )}
+      </div>
+
+      {/* ── Dot indicators (mobile) ── */}
+      {total > 1 && (
+        <div className="mt-3 flex justify-center gap-2 sm:hidden">
+          {items.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Go to resort ${i + 1}`}
+              onClick={() => { setActiveIdx(i); scrollToCard(i); }}
+            >
+              <motion.span
+                animate={{
+                  width: i === activeIdx ? 22 : 7,
+                  backgroundColor: i === activeIdx ? "#c8a951" : "#c8a95166",
+                }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="block h-2 rounded-full"
+                style={{ width: 7, backgroundColor: "#c8a95166" }}
+              />
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* ── Counter label e.g. "2 / 4" ── */}
+      {total > 1 && (
+        <p className="mt-2 text-center text-xs font-medium text-luxury-charcoal/50 sm:hidden">
+          {activeIdx + 1} <span className="text-luxury-charcoal/30">/</span> {total}
+        </p>
+      )}
+    </motion.section>
   );
 };
 
@@ -454,26 +783,7 @@ const ProductCollection = ({
     <div className="min-h-screen bg-gradient-to-b from-luxury-cream via-luxury-sand/40 to-luxury-cream">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         {featuredStrip.length > 0 && (
-          <motion.section
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-12"
-          >
-            <h2 className="font-display text-2xl font-semibold text-luxury-black">
-              Featured resorts
-            </h2>
-            <p className="mt-2 text-sm text-luxury-charcoal/70">
-              Handpicked properties from our collection.
-            </p>
-            <div className="mt-6 flex gap-4 overflow-x-auto pb-2 hide-scrollbar sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-4">
-              {featuredStrip.map((item) => (
-                <div key={item._id} className="min-w-[260px] shrink-0 sm:min-w-0">
-                  <ResortCard item={item} />
-                </div>
-              ))}
-            </div>
-          </motion.section>
+          <FeaturedCarousel items={featuredStrip} />
         )}
 
         <div className="mb-8">
@@ -622,14 +932,12 @@ const ProductCollection = ({
                 role="switch"
                 aria-checked={onlyAvailable}
                 onClick={() => setOnlyAvailable((v) => !v)}
-                className={`relative h-8 w-14 rounded-full transition-colors ${
-                  onlyAvailable ? "bg-luxury-gold" : "bg-luxury-stone"
-                }`}
+                className={`relative h-8 w-14 rounded-full transition-colors ${onlyAvailable ? "bg-luxury-gold" : "bg-luxury-stone"
+                  }`}
               >
                 <span
-                  className={`absolute top-1 h-6 w-6 rounded-full bg-white shadow transition-transform ${
-                    onlyAvailable ? "left-7" : "left-1"
-                  }`}
+                  className={`absolute top-1 h-6 w-6 rounded-full bg-white shadow transition-transform ${onlyAvailable ? "left-7" : "left-1"
+                    }`}
                 />
               </button>
             </div>

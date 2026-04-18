@@ -7,10 +7,10 @@ const productSchema = new mongoose.Schema({
 
   // ── Per-resort pricing schedule ──────────────────────────────────────────
   pricing: {
-    weekendFullDay: { type: Number, default: null }, // Fri/Sat/Sun — 24 hrs
-    weekendHalfDay: { type: Number, default: null }, // Fri/Sat/Sun — 12 hrs
-    weekdayFullDay: { type: Number, default: null }, // Mon-Thu — 24 hrs
-    weekdayHalfDay: { type: Number, default: null }, // Mon-Thu — 12 hrs
+    weekendFullDay: { type: Number, default: null }, // Sat/Sun — 24 hrs
+    weekendHalfDay: { type: Number, default: null }, // Sat/Sun — 12 hrs
+    weekdayFullDay: { type: Number, default: null }, // Mon-Fri — 24 hrs
+    weekdayHalfDay: { type: Number, default: null }, // Mon-Fri — 12 hrs
   },
 
   desc: { type: String },
