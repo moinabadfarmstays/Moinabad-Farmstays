@@ -21,6 +21,7 @@ import Image from "next/image";
 import { ResortCardSkeleton } from "./ui/Skeleton";
 import Button from "./ui/Button";
 import { formatDate } from "../utils/formatDate";
+import { getPricing } from "../utils/pricingUtils";
 
 function averageRating(item) {
   if (!item.reviews?.length) return null;
@@ -41,6 +42,7 @@ const ResortCard = ({ item, featured = false }) => {
 
   const hasMultipleImages = displayImages.length > 1;
   const avg = averageRating(item);
+  const pricing = getPricing(item);
 
   const nextImage = (e) => {
     e.stopPropagation();
@@ -175,11 +177,15 @@ const ResortCard = ({ item, featured = false }) => {
           </div>
 
           <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-4">
-            <div>
-              <p className="text-2xl font-bold text-luxury-black">
-                ₹{item.price.toLocaleString()}
-              </p>
-              <p className="text-xs text-luxury-charcoal/60">per night</p>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-luxury-charcoal/70 w-16">Weekday:</span>
+                <span className="text-lg font-bold text-luxury-black">₹{pricing.weekdayFullDay.toLocaleString()}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-amber-600/90 w-16">Weekend:</span>
+                <span className="text-lg font-bold text-amber-700">₹{pricing.weekendFullDay.toLocaleString()}</span>
+              </div>
 
               {/* Availability Status Indicator */}
               {item.available === false ? (
@@ -813,7 +819,7 @@ const ProductCollection = ({
             <button
               type="button"
               onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center gap-2 rounded-2xl border border-luxury-stone bg-white/95 px-4 py-3 text-sm font-medium shadow-sm transition hover:border-luxury-gold/40 lg:hidden"
+              className="inline-flex items-center gap-2 rounded-2xl border border-luxury-stone bg-white/95 px-4 py-3 text-sm font-medium shadow-sm transition hover:border-luxury-gold/40"
             >
               <SlidersHorizontal className="h-5 w-5" />
               Filters
@@ -856,7 +862,7 @@ const ProductCollection = ({
         <div className="flex gap-8">
           <aside
             className={`
-            ${showFilters ? "block" : "hidden"} lg:block
+            ${showFilters ? "block" : "hidden"} 
             fixed lg:sticky top-0 left-0 lg:left-auto
             w-[min(100vw-2rem,20rem)] lg:w-72 h-screen lg:h-auto
             rounded-2xl border border-luxury-stone/80 bg-white/90 p-6 shadow-luxury backdrop-blur-md

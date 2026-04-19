@@ -89,7 +89,7 @@ export default function UserDashboard() {
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
 
         {/* ── Available Resorts ── */}
-        <div className="mb-8 sm:mb-10">
+        {/* <div className="mb-8 sm:mb-10">
           <div className="mb-4 flex items-center gap-2.5 border-b border-luxury-stone/30 pb-3 sm:mb-6 sm:pb-4">
             <Calendar className="h-5 w-5 text-luxury-gold-dark sm:h-6 sm:w-6" />
             <h2 className="font-display text-xl font-semibold text-luxury-black sm:text-2xl">
@@ -101,7 +101,7 @@ export default function UserDashboard() {
             initialOnlyAvailable={true}
             title=""
           />
-        </div>
+        </div> */}
 
         {/* ── Experience / Moinabad Promise Strip ── */}
         <motion.div

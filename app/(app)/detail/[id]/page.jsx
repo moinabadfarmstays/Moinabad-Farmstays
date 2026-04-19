@@ -151,13 +151,19 @@ const DynamicProduct = () => {
       const res = await fetch("/api/admin/add-product");
       const data = await res.json();
       const currentArea = extractArea(current?.address);
-      const similar = (data.products || []).filter(
+      let similar = (data.products || []).filter(
         (p) =>
           p._id !== current._id &&
           extractArea(p.address)
             .split(",")
             .some((part) => currentArea.includes(part) && part.length > 2)
       );
+      
+      // If no resorts hit the exact area matching, fallback to any other resorts
+      if (similar.length === 0) {
+        similar = (data.products || []).filter((p) => p._id !== current._id);
+      }
+      
       setSimilarResorts(similar.slice(0, 6));
     } catch {
       // non-critical

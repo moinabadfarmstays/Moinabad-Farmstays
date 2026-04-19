@@ -4,6 +4,7 @@ import Image from "next/image";
 import { MapPin, Star, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { getPricing } from "../../../../utils/pricingUtils";
 
 function averageRating(reviews) {
   if (!reviews?.length) return null;
@@ -29,6 +30,7 @@ export default function SimilarResorts({ resorts }) {
   const router = useRouter();
   if (!resorts?.length) return null;
 
+  // inside the map...
   return (
     <motion.section
       initial={{ opacity: 0, y: 32 }}
@@ -49,7 +51,7 @@ export default function SimilarResorts({ resorts }) {
         </div>
         <button
           type="button"
-          onClick={() => router.push("/resorts")}
+          onClick={() => router.push("/user/dashboard")}
           className="group hidden items-center gap-1.5 rounded-full border border-luxury-stone bg-white/90 px-4 py-2 text-sm font-medium text-luxury-charcoal shadow-sm transition-all hover:border-luxury-gold/50 hover:bg-luxury-sand sm:inline-flex"
         >
           View all
@@ -68,6 +70,7 @@ export default function SimilarResorts({ resorts }) {
             resort.available === false ||
             (resort.bookings && resort.bookings.length > 0);
           const avg = averageRating(resort.reviews);
+          const pricing = getPricing(resort);
 
           return (
             <motion.button
@@ -79,7 +82,7 @@ export default function SimilarResorts({ resorts }) {
               viewport={{ once: true, margin: "-30px" }}
               type="button"
               onClick={() => router.push(`/detail/${resort._id}`)}
-              className="group snap-start flex-shrink-0 w-64 sm:w-72 overflow-hidden rounded-2xl border border-luxury-stone/70 bg-white shadow-glass text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-luxury hover:border-luxury-gold/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-luxury-gold"
+              className="group snap-start flex-shrink-0 w-64 sm:w-72 overflow-hidden rounded-2xl border border-luxury-stone/70 bg-white shadow-glass text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-luxury hover:border-luxury-gold/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-luxury-gold flex flex-col"
             >
               {/* Image */}
               <div className="relative h-48 sm:h-56 overflow-hidden bg-luxury-charcoal">
@@ -112,20 +115,10 @@ export default function SimilarResorts({ resorts }) {
                     {avg}
                   </span>
                 )}
-
-                {/* Price overlay bottom */}
-                <div className="absolute bottom-0 left-0 right-0 p-3">
-                  <p className="text-base font-bold text-white drop-shadow">
-                    ₹{resort.price?.toLocaleString()}
-                    <span className="ml-1 text-xs font-normal text-white/70">
-                      /night
-                    </span>
-                  </p>
-                </div>
               </div>
 
               {/* Info panel */}
-              <div className="px-4 py-4">
+              <div className="px-4 py-4 flex flex-col flex-1">
                 <h3 className="mb-1.5 line-clamp-1 font-display text-base font-semibold text-luxury-black group-hover:text-luxury-gold-dark transition-colors duration-200">
                   {resort.title}
                 </h3>
@@ -133,6 +126,17 @@ export default function SimilarResorts({ resorts }) {
                 <div className="mb-3 flex items-center gap-1 text-xs text-luxury-charcoal/60">
                   <MapPin className="h-3.5 w-3.5 flex-shrink-0 text-luxury-gold-dark" />
                   <span className="line-clamp-1">{resort.address}</span>
+                </div>
+
+                <div className="mt-auto pt-2 mb-3">
+                  <div className="flex justify-between items-center bg-gray-50/50 p-1.5 rounded-lg border border-gray-100/50">
+                    <span className="text-[10px] font-semibold text-luxury-charcoal/60">Weekday</span>
+                    <span className="text-sm font-bold text-luxury-black">₹{pricing.weekdayFullDay.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between items-center bg-amber-50/40 p-1.5 rounded-lg border border-amber-100/40 mt-1">
+                    <span className="text-[10px] font-semibold text-amber-700/80">Weekend</span>
+                    <span className="text-sm font-bold text-amber-800">₹{pricing.weekendFullDay.toLocaleString()}</span>
+                  </div>
                 </div>
 
                 {/* Amenity chips */}

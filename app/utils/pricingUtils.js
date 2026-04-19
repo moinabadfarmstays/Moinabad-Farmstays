@@ -70,7 +70,7 @@ export function calculateTotal(dates, durationType, resort) {
   // Multi-day: sum each night (always 24hr rate per night)
   let total = 0;
   const cursor = new Date(start);
-  while (cursor < end) {
+  while (cursor <= end) {
     total += nightRate(cursor, pricing, "24hr");
     cursor.setDate(cursor.getDate() + 1);
   }
@@ -86,5 +86,5 @@ export function getNights(dates) {
   const start = new Date(dates.startDate);
   const end   = new Date(dates.endDate);
   if (start.toDateString() === end.toDateString()) return 1;
-  return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+  return Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
 }
