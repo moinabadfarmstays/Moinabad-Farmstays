@@ -1112,7 +1112,7 @@ const ProductCollection = ({
                       {/* <h3 className="mb-4 font-display text-lg font-semibold text-luxury-black">
                         More stays
                       </h3> */}
-                      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2">
+                      <div className={`grid grid-cols-1 gap-6 md:grid-cols-2 ${showFilters ? 'lg:grid-cols-2 xl:grid-cols-2' : 'lg:grid-cols-3 xl:grid-cols-3'}`}>
                         {gridItems.map((item) => (
                           <ResortCard key={item._id} item={item} />
                         ))}

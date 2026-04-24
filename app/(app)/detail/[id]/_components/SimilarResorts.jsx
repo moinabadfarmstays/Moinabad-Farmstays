@@ -51,7 +51,7 @@ export default function SimilarResorts({ resorts }) {
         </div>
         <button
           type="button"
-          onClick={() => router.push("/user/dashboard")}
+          onClick={() => router.push("/resorts")}
           className="group hidden items-center gap-1.5 rounded-full border border-luxury-stone bg-white/90 px-4 py-2 text-sm font-medium text-luxury-charcoal shadow-sm transition-all hover:border-luxury-gold/50 hover:bg-luxury-sand sm:inline-flex"
         >
           View all
