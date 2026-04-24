@@ -742,7 +742,7 @@ const ProductCollection = ({
     (minRating > 0 ? 1 : 0) +
     (onlyAvailable ? 1 : 0);
 
-  const featuredStrip = variant === "home" ? collection.slice(0, 4) : [];
+  const featuredStrip = variant === "home" ? collection.filter(item => item.isFeatured) : [];
 
   if (loading) {
     return (

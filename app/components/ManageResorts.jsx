@@ -5,7 +5,8 @@ import Image from "next/image";
 import {
   Edit, Trash2, Eye, EyeOff,
   Search, Filter, CheckSquare, Square, X,
-  SlidersHorizontal, ArrowUpDown, IndianRupee, RotateCcw, MapPin
+  SlidersHorizontal, ArrowUpDown, IndianRupee, RotateCcw, MapPin,
+  ChevronLeft, ChevronRight
 } from "lucide-react";
 import BackButton from "./ui/BackButton";
 
@@ -580,6 +581,7 @@ const EditResortModal = ({ resort, onClose, onSave }) => {
     latitude: resort.latitude || "",
     longitude: resort.longitude || "",
     available: resort.available !== false,
+    isFeatured: resort.isFeatured || false,
     // Per-resort pricing
     "pricing.weekendFullDay": resort.pricing?.weekendFullDay ?? "",
     "pricing.weekendHalfDay": resort.pricing?.weekendHalfDay ?? "",
@@ -587,6 +589,19 @@ const EditResortModal = ({ resort, onClose, onSave }) => {
     "pricing.weekdayHalfDay": resort.pricing?.weekdayHalfDay ?? "",
   });
   const [loading, setLoading] = useState(false);
+  const [profileImages, setProfileImages] = useState(resort.profileImages || []);
+  const [carouselImages, setCarouselImages] = useState(resort.carouselImages || []);
+
+  const moveImage = (type, index, direction) => {
+    const images = type === "profile" ? [...profileImages] : [...carouselImages];
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= images.length) return;
+    const temp = images[index];
+    images[index] = images[newIndex];
+    images[newIndex] = temp;
+    if (type === "profile") setProfileImages(images);
+    else setCarouselImages(images);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -604,6 +619,9 @@ const EditResortModal = ({ resort, onClose, onSave }) => {
         latitude: formData.latitude,
         longitude: formData.longitude,
         available: formData.available,
+        isFeatured: formData.isFeatured,
+        profileImages,
+        carouselImages,
         pricing: {
           weekendFullDay: formData["pricing.weekendFullDay"] !== "" ? parseFloat(formData["pricing.weekendFullDay"]) : null,
           weekendHalfDay: formData["pricing.weekendHalfDay"] !== "" ? parseFloat(formData["pricing.weekendHalfDay"]) : null,
@@ -810,6 +828,88 @@ const EditResortModal = ({ resort, onClose, onSave }) => {
                     }`}
                 />
               </button>
+            </div>
+
+            {/* Featured Status Section */}
+            <div className="flex items-center gap-3 rounded-2xl border border-luxury-stone/50 bg-luxury-sand/20 p-4">
+              <div className="flex-1">
+                <h3 className="text-sm font-semibold text-luxury-black flex items-center gap-2">
+                  <span>⭐</span> Featured Status
+                </h3>
+                <p className="mt-1 text-xs text-luxury-charcoal/60">
+                  {formData.isFeatured ? "This resort will be highlighted on the home page carousel." : "This resort is not featured on the home page."}
+                </p>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={formData.isFeatured}
+                onClick={() => setFormData({ ...formData, isFeatured: !formData.isFeatured })}
+                className={`relative h-7 w-12 rounded-full transition-colors ${
+                  formData.isFeatured ? "bg-luxury-gold" : "bg-luxury-stone"
+                }`}
+              >
+                <span
+                  className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                    formData.isFeatured ? "left-6" : "left-1"
+                  }`}
+                />
+              </button>
+            </div>
+
+            {/* Image Reordering Section */}
+            <div className="rounded-2xl border border-luxury-stone/50 bg-luxury-sand/20 p-4 space-y-6">
+              <h3 className="text-sm font-semibold text-luxury-black flex items-center gap-2">
+                <span>📸</span> Manage Images
+              </h3>
+              
+              {/* Profile Images */}
+              <div>
+                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-luxury-charcoal/60">Profile Images</p>
+                {profileImages.length > 0 ? (
+                  <div className="flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
+                    {profileImages.map((img, idx) => (
+                      <div key={`profile-${idx}`} className="group relative shrink-0">
+                        <Image src={img} alt={`Profile ${idx}`} width={100} height={100} className="h-24 w-24 rounded-xl object-cover border border-luxury-stone shadow-sm" />
+                        <div className="absolute inset-0 flex items-center justify-between px-1 opacity-0 group-hover:opacity-100 transition-opacity bg-black/30 rounded-xl">
+                          <button type="button" onClick={() => moveImage('profile', idx, -1)} disabled={idx === 0} className="p-1 rounded-full bg-white/80 hover:bg-white disabled:opacity-50 text-black">
+                            <ChevronLeft className="w-4 h-4" />
+                          </button>
+                          <button type="button" onClick={() => moveImage('profile', idx, 1)} disabled={idx === profileImages.length - 1} className="p-1 rounded-full bg-white/80 hover:bg-white disabled:opacity-50 text-black">
+                            <ChevronRight className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-luxury-charcoal/50">No profile images found.</p>
+                )}
+              </div>
+
+              {/* Carousel Images */}
+              <div>
+                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-luxury-charcoal/60">Carousel Images</p>
+                {carouselImages.length > 0 ? (
+                  <div className="flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
+                    {carouselImages.map((img, idx) => (
+                      <div key={`carousel-${idx}`} className="group relative shrink-0">
+                        <Image src={img} alt={`Carousel ${idx}`} width={100} height={100} className="h-24 w-24 rounded-xl object-cover border border-luxury-stone shadow-sm" />
+                        <div className="absolute inset-0 flex items-center justify-between px-1 opacity-0 group-hover:opacity-100 transition-opacity bg-black/30 rounded-xl">
+                          <button type="button" onClick={() => moveImage('carousel', idx, -1)} disabled={idx === 0} className="p-1 rounded-full bg-white/80 hover:bg-white disabled:opacity-50 text-black">
+                            <ChevronLeft className="w-4 h-4" />
+                          </button>
+                          <button type="button" onClick={() => moveImage('carousel', idx, 1)} disabled={idx === carouselImages.length - 1} className="p-1 rounded-full bg-white/80 hover:bg-white disabled:opacity-50 text-black">
+                            <ChevronRight className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-luxury-charcoal/50">No carousel images found.</p>
+                )}
+              </div>
             </div>
 
             <div>

@@ -13,6 +13,7 @@ const AddProduct = () => {
   const [address, setAddress] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
+  const [isFeatured, setIsFeatured] = useState(false);
 
   // Per-resort pricing
   const [pricingWeekendFullDay, setPricingWeekendFullDay] = useState("");
@@ -184,6 +185,7 @@ const AddProduct = () => {
       if (address) formData.append("address", address);
       if (latitude) formData.append("latitude", latitude);
       if (longitude) formData.append("longitude", longitude);
+      formData.append("isFeatured", isFeatured);
       if (pricingWeekendFullDay) formData.append("pricing.weekendFullDay", pricingWeekendFullDay);
       if (pricingWeekendHalfDay) formData.append("pricing.weekendHalfDay", pricingWeekendHalfDay);
       if (pricingWeekdayFullDay) formData.append("pricing.weekdayFullDay", pricingWeekdayFullDay);
@@ -222,6 +224,7 @@ const AddProduct = () => {
         setAddress("");
         setLatitude("");
         setLongitude("");
+        setIsFeatured(false);
         setPricingWeekendFullDay("");
         setPricingWeekendHalfDay("");
         setPricingWeekdayFullDay("");
@@ -372,6 +375,33 @@ const AddProduct = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Featured Status Section */}
+          <div className="flex items-center gap-3 rounded-2xl border border-luxury-stone/50 bg-luxury-sand/20 p-5">
+            <div className="flex-1">
+              <h3 className="text-base font-semibold text-luxury-black flex items-center gap-2">
+                <span>⭐</span> Featured Status
+              </h3>
+              <p className="mt-1 text-xs text-luxury-charcoal/60">
+                {isFeatured ? "This resort will be highlighted on the home page carousel." : "This resort is not featured on the home page."}
+              </p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={isFeatured}
+              onClick={() => setIsFeatured(!isFeatured)}
+              className={`relative h-7 w-12 rounded-full transition-colors ${
+                isFeatured ? "bg-luxury-gold" : "bg-luxury-stone"
+              }`}
+            >
+              <span
+                className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                  isFeatured ? "left-6" : "left-1"
+                }`}
+              />
+            </button>
           </div>
 
           {/* Location Section */}

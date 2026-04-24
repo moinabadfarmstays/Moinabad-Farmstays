@@ -18,6 +18,7 @@ const productSchema = new mongoose.Schema({
   latitude: { type: Number, default: null },
   longitude: { type: Number, default: null },
   available: { type: Boolean, default: true },
+  isFeatured: { type: Boolean, default: false },
   image: { type: String },
   images: { type: [String], default: [] },
   profileImages: { type: [String], default: [] },

@@ -140,6 +140,7 @@ export async function POST(request) {
     const latitude = data.get("latitude") ? parseFloat(data.get("latitude")) : null;
     const longitude = data.get("longitude") ? parseFloat(data.get("longitude")) : null;
     const available = data.get("available") !== "false"; // Default to true
+    const isFeatured = data.get("isFeatured") === "true"; // Default to false
 
     // Per-resort pricing schedule
     const pricingWeekendFullDay = data.get("pricing.weekendFullDay");
@@ -189,6 +190,7 @@ export async function POST(request) {
       profileImages: uploadedProfileUrls,
       carouselImages: uploadedCarouselUrls,
       available,
+      isFeatured,
     });
 
     return NextResponse.json({ success: true, product: newProduct }, { status: 200 });
