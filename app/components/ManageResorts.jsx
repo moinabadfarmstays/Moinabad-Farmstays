@@ -6,7 +6,7 @@ import {
   Edit, Trash2, Eye, EyeOff,
   Search, Filter, CheckSquare, Square, X,
   SlidersHorizontal, ArrowUpDown, IndianRupee, RotateCcw, MapPin,
-  ChevronLeft, ChevronRight
+  ChevronLeft, ChevronRight, Star
 } from "lucide-react";
 import BackButton from "./ui/BackButton";
 
@@ -24,6 +24,7 @@ const ManageResorts = () => {
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+  const [showFeaturedManager, setShowFeaturedManager] = useState(false);
 
   // Fetch resorts
   useEffect(() => {
@@ -81,6 +82,21 @@ const ManageResorts = () => {
       }
     } catch (error) {
       console.error("Error toggling availability:", error);
+    }
+  };
+
+  // Quick-toggle featured flag (no modal needed)
+  const handleToggleFeatured = async (id, currentFeatured) => {
+    try {
+      const response = await fetch(`/api/admin/product/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isFeatured: !currentFeatured }),
+      });
+      const data = await response.json();
+      if (data.success) fetchResorts();
+    } catch (error) {
+      console.error("Error toggling featured:", error);
     }
   };
 
@@ -215,9 +231,26 @@ const ManageResorts = () => {
             <p className="mt-2 text-luxury-charcoal/70">
               <span className="font-semibold text-luxury-black">{resorts.length}</span> total ·{" "}
               <span className="font-semibold text-luxury-gold-dark">{filteredResorts.length}</span> shown
+              {resorts.filter(r => r.isFeatured).length > 0 && (
+                <> · <span className="font-semibold text-amber-600">{resorts.filter(r => r.isFeatured).length} featured</span></>
+              )}
             </p>
           </div>
           <div className="flex items-center gap-3">
+            {/* ⭐ Manage Featured button */}
+            <button
+              type="button"
+              onClick={() => setShowFeaturedManager(true)}
+              className="flex items-center gap-2 rounded-2xl border border-luxury-gold/60 bg-luxury-gold/10 px-4 py-2.5 text-sm font-semibold text-luxury-gold-dark shadow-sm transition hover:bg-luxury-gold/20"
+            >
+              <Star className="h-4 w-4 fill-luxury-gold text-luxury-gold" />
+              Manage Featured
+              {resorts.filter(r => r.isFeatured).length > 0 && (
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-luxury-gold text-xs font-bold text-luxury-black">
+                  {resorts.filter(r => r.isFeatured).length}
+                </span>
+              )}
+            </button>
             <BackButton href="/admin" label="Back to Console" />
           </div>
         </div>
@@ -420,6 +453,7 @@ const ManageResorts = () => {
               onToggleSelect={() => toggleSelectResort(resort._id)}
               onDelete={() => handleDelete(resort._id)}
               onToggleAvailability={() => handleToggleAvailability(resort._id, resort.available)}
+              onToggleFeatured={() => handleToggleFeatured(resort._id, resort.isFeatured)}
               onEdit={() => setEditingResort(resort)}
             />
           ))}
@@ -454,18 +488,228 @@ const ManageResorts = () => {
           }}
         />
       )}
+
+      {/* ⭐ Featured Manager Modal */}
+      {showFeaturedManager && (
+        <FeaturedManagerModal
+          resorts={resorts}
+          onClose={() => setShowFeaturedManager(false)}
+          onSave={() => {
+            setShowFeaturedManager(false);
+            fetchResorts();
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+// ─── Featured Manager Modal ───────────────────────────────────────────────────
+const FeaturedManagerModal = ({ resorts, onClose, onSave }) => {
+  // Initialise with the IDs that are already featured
+  const [selected, setSelected] = useState(
+    new Set(resorts.filter(r => r.isFeatured).map(r => r._id))
+  );
+  const [search, setSearch] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  const filtered = resorts.filter(r =>
+    r.title?.toLowerCase().includes(search.toLowerCase()) ||
+    r.address?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const toggle = (id) => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      // For every resort, set isFeatured based on the current selection
+      await Promise.all(
+        resorts.map(r =>
+          fetch(`/api/admin/product/${r._id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ isFeatured: selected.has(r._id) }),
+          })
+        )
+      );
+      onSave();
+    } catch (err) {
+      console.error("Error saving featured resorts:", err);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-luxury-black/60 p-4 backdrop-blur-sm">
+      <div className="flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border border-luxury-gold/30 bg-white shadow-luxury">
+
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-luxury-stone/60 bg-luxury-black px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-luxury-gold/20">
+              <Star className="h-5 w-5 fill-luxury-gold text-luxury-gold" />
+            </div>
+            <div>
+              <h2 className="font-display text-lg font-semibold text-white">
+                Manage Featured Resorts
+              </h2>
+              <p className="text-xs text-white/50">
+                {selected.size} resort{selected.size !== 1 ? "s" : ""} selected · shown in the home carousel
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-xl p-2 text-white/60 transition hover:bg-white/10 hover:text-white"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Search */}
+        <div className="border-b border-luxury-stone/40 bg-luxury-sand/30 px-6 py-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-luxury-charcoal/40" />
+            <input
+              type="text"
+              placeholder="Search resorts…"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="w-full rounded-xl border border-luxury-stone bg-white py-2.5 pl-9 pr-4 text-sm outline-none focus:border-luxury-gold focus:ring-2 focus:ring-luxury-gold/20"
+            />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-luxury-charcoal/40 hover:text-luxury-black"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Info strip */}
+        <div className="flex items-center gap-2 border-b border-luxury-stone/30 bg-amber-50/60 px-6 py-2.5">
+          <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500 shrink-0" />
+          <p className="text-xs text-amber-700">
+            Click a resort card to toggle its featured status. Gold border = featured.
+          </p>
+        </div>
+
+        {/* Resort Grid — scrollable */}
+        <div className="flex-1 overflow-y-auto p-6">
+          {filtered.length === 0 ? (
+            <p className="py-12 text-center text-sm text-luxury-charcoal/50">No resorts found.</p>
+          ) : (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
+              {filtered.map(resort => {
+                const isSel = selected.has(resort._id);
+                const thumb = resort.profileImages?.[0] || resort.image || "https://images.unsplash.com/photo-1566073771259-6a8506099945";
+                return (
+                  <button
+                    key={resort._id}
+                    type="button"
+                    onClick={() => toggle(resort._id)}
+                    className={`group relative overflow-hidden rounded-2xl border-2 text-left transition-all duration-200 ${
+                      isSel
+                        ? "border-luxury-gold shadow-[0_0_0_3px_rgba(200,169,81,0.25)]"
+                        : "border-luxury-stone/50 hover:border-luxury-gold/40"
+                    }`}
+                  >
+                    {/* Thumbnail */}
+                    <div className="relative h-32 w-full overflow-hidden bg-luxury-charcoal">
+                      <Image
+                        src={thumb}
+                        alt={resort.title}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                      {/* Overlay */}
+                      <div className={`absolute inset-0 transition-opacity duration-200 ${isSel ? "bg-luxury-gold/20" : "bg-transparent"}`} />
+                      {/* Star badge */}
+                      <div className={`absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full shadow transition-all duration-200 ${
+                        isSel ? "bg-luxury-gold" : "bg-white/80"
+                      }`}>
+                        <Star className={`h-4 w-4 transition-all duration-200 ${isSel ? "fill-luxury-black text-luxury-black" : "text-luxury-charcoal/40"}`} />
+                      </div>
+                    </div>
+                    {/* Info */}
+                    <div className={`p-3 transition-colors duration-200 ${isSel ? "bg-luxury-gold/5" : "bg-white"}`}>
+                      <p className={`truncate text-sm font-semibold leading-tight ${isSel ? "text-luxury-gold-dark" : "text-luxury-black"}`}>
+                        {resort.title}
+                      </p>
+                      {resort.address && (
+                        <p className="mt-0.5 flex items-center gap-1 truncate text-[11px] text-luxury-charcoal/55">
+                          <MapPin className="h-3 w-3 shrink-0" />
+                          {resort.address}
+                        </p>
+                      )}
+                      <div className={`mt-2 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                        isSel ? "bg-luxury-gold text-luxury-black" : "bg-luxury-stone/50 text-luxury-charcoal/60"
+                      }`}>
+                        <Star className={`h-2.5 w-2.5 ${isSel ? "fill-luxury-black" : ""}`} />
+                        {isSel ? "Featured" : "Not Featured"}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Footer Actions */}
+        <div className="flex items-center justify-between border-t border-luxury-stone/60 bg-luxury-sand/30 px-6 py-4">
+          <p className="text-sm text-luxury-charcoal/60">
+            <span className="font-semibold text-luxury-gold-dark">{selected.size}</span> of{" "}
+            <span className="font-semibold text-luxury-black">{resorts.length}</span> resorts selected as featured
+          </p>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-xl border border-luxury-stone bg-white px-5 py-2.5 text-sm font-semibold text-luxury-black transition hover:bg-luxury-stone/60"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={saving}
+              className="flex items-center gap-2 rounded-xl bg-luxury-gold px-6 py-2.5 text-sm font-bold text-luxury-black shadow-luxury-gold transition hover:bg-luxury-gold-light disabled:opacity-60"
+            >
+              <Star className="h-4 w-4 fill-luxury-black" />
+              {saving ? "Saving…" : "Save Featured"}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
 // Resort Card Component
-const ResortCard = ({ resort, isSelected, onToggleSelect, onDelete, onToggleAvailability, onEdit }) => {
+const ResortCard = ({ resort, isSelected, onToggleSelect, onDelete, onToggleAvailability, onToggleFeatured, onEdit }) => {
   return (
-    <div className={`overflow-hidden rounded-2xl border border-luxury-stone/80 bg-white/95 shadow-glass transition-all duration-200 hover:shadow-luxury ${isSelected ? 'ring-2 ring-luxury-gold' : ''}`}>
+    <div className={`overflow-hidden rounded-2xl border bg-white/95 shadow-glass transition-all duration-200 hover:shadow-luxury ${
+      isSelected ? 'ring-2 ring-luxury-gold border-luxury-gold/50' : 'border-luxury-stone/80'
+    }`}>
       {/* Image */}
       <div className="relative h-48">
         <Image
-          src={resort.image || '/placeholder.jpg'}
+          src={resort.profileImages?.[0] || resort.image || '/placeholder.jpg'}
           alt={resort.title}
           fill
           className="object-cover"
@@ -484,10 +728,19 @@ const ResortCard = ({ resort, isSelected, onToggleSelect, onDelete, onToggleAvai
         </button>
 
         {/* Availability Badge */}
-        <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold ${resort.available !== false ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-          }`}>
+        <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold ${
+          resort.available !== false ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+        }`}>
           {resort.available !== false ? 'Available' : 'Unavailable'}
         </div>
+
+        {/* Featured Badge */}
+        {resort.isFeatured && (
+          <div className="absolute bottom-3 left-3 flex items-center gap-1 rounded-full bg-luxury-gold px-2.5 py-1 text-xs font-bold text-luxury-black shadow">
+            <Star className="h-3 w-3 fill-luxury-black" />
+            Featured
+          </div>
+        )}
       </div>
 
       {/* Content */}
@@ -540,6 +793,20 @@ const ResortCard = ({ resort, isSelected, onToggleSelect, onDelete, onToggleAvai
           >
             <Edit className="h-4 w-4" />
             Edit
+          </button>
+
+          {/* ⭐ Quick Featured Toggle */}
+          <button
+            type="button"
+            onClick={onToggleFeatured}
+            title={resort.isFeatured ? "Remove from Featured" : "Mark as Featured"}
+            className={`rounded-xl px-3 py-2 transition ${
+              resort.isFeatured
+                ? "bg-luxury-gold text-luxury-black hover:bg-luxury-gold-light"
+                : "border border-luxury-stone bg-luxury-sand/80 text-luxury-charcoal/60 hover:bg-luxury-stone/80"
+            }`}
+          >
+            <Star className={`h-5 w-5 ${resort.isFeatured ? "fill-luxury-black" : ""}`} />
           </button>
 
           <button

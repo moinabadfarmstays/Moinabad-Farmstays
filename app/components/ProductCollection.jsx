@@ -252,9 +252,9 @@ const ResortCard = ({ item, featured = false }) => {
 // Desktop (sm+): standard 4-col grid
 
 // ─── Auto-scroll interval (ms) ───────────────────────────────────────────────
-const CAROUSEL_INTERVAL = 8000;
+const CAROUSEL_INTERVAL = 7000;
 
-const FeaturedCarousel = ({ items }) => {
+const FeaturedCarousel = ({ items, isFallback = false }) => {
   const trackRef = useRef(null);
   const [activeIdx, setActiveIdx] = useState(0);
   const [showHint, setShowHint] = useState(true);
@@ -342,7 +342,9 @@ const FeaturedCarousel = ({ items }) => {
             Featured resorts
           </h2>
           <p className="mt-1 text-sm text-luxury-charcoal/70">
-            Handpicked properties from our collection.
+            {isFallback
+              ? "All resorts — mark favourites as ⭐ Featured in the admin panel."
+              : "Handpicked properties from our collection."}
           </p>
         </div>
 
@@ -742,7 +744,12 @@ const ProductCollection = ({
     (minRating > 0 ? 1 : 0) +
     (onlyAvailable ? 1 : 0);
 
-  const featuredStrip = variant === "home" ? collection.filter(item => item.isFeatured) : [];
+  // Featured strip: admin-curated items first; fall back to first 8 if none curated.
+  const adminFeatured = variant === "home" ? collection.filter(item => item.isFeatured) : [];
+  const featuredStrip = variant === "home"
+    ? (adminFeatured.length > 0 ? adminFeatured : collection.slice(0, 8))
+    : [];
+  const isFeaturedFallback = variant === "home" && adminFeatured.length === 0 && collection.length > 0;
 
   if (loading) {
     return (
@@ -789,7 +796,7 @@ const ProductCollection = ({
     <div className="min-h-screen bg-gradient-to-b from-luxury-cream via-luxury-sand/40 to-luxury-cream">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         {featuredStrip.length > 0 && (
-          <FeaturedCarousel items={featuredStrip} />
+          <FeaturedCarousel items={featuredStrip} isFallback={isFeaturedFallback} />
         )}
 
         <div className="mb-8">
