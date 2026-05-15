@@ -292,18 +292,18 @@ export default function HomeWithHero() {
       />
 
       {/* ── Search Results / Main Collection ── */}
-      <div id="resorts-explore">
+      <section id="resorts-explore">
         <ProductCollection
           variant="home"
           searchQuery={heroSearch}
           setSearchQuery={setHeroSearch}
         />
-      </div>
+      </section>
 
       {/* ── Sectioned "All Resorts" bottom section ── */}
-      <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
         <SectionedResorts />
-      </div>
+      </section>
     </>
   );
 }

@@ -45,14 +45,18 @@ export default function SiteFooter() {
             <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-luxury-gold">
               Contact
             </h3>
-            <ul className="mt-4 space-y-2 text-sm text-luxury-sand/90">
-              <li>
+            <address className="mt-4 space-y-2 text-sm text-luxury-sand/90 not-italic">
+              <p>
                 <a href="tel:+916304691625" className="hover:text-luxury-gold-light transition-colors">
                   +91 6304691625
                 </a>
-              </li>
-              <li>moinabadfarmstays@gmail.com</li>
-            </ul>
+              </p>
+              <p>
+                <a href="mailto:moinabadfarmstays@gmail.com" className="hover:text-luxury-gold-light transition-colors">
+                  moinabadfarmstays@gmail.com
+                </a>
+              </p>
+            </address>
           </div>
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-luxury-gold">
