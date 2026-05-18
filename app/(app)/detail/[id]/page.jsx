@@ -139,7 +139,7 @@ function DescriptionCard({ desc }) {
       {/* Mobile closed hint */}
       {!open && (
         <p className="lg:hidden px-6 pb-4 text-xs text-luxury-charcoal/40 italic">
-          Tap "About This Room" to read more ↑
+          Tap &quot;About This Room&quot; to read more ↑
         </p>
       )}
     </div>
