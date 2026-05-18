@@ -46,6 +46,12 @@ export default function SiteFooter() {
               Contact
             </h3>
             <address className="mt-4 space-y-2 text-sm text-luxury-sand/90 not-italic">
+              {/* Manager */}
+              <p className="flex items-center gap-1.5">
+                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-luxury-gold/20 text-[10px] font-black text-luxury-gold ring-1 ring-luxury-gold/30">J</span>
+                <span className="font-semibold text-luxury-gold-light">Jagan Sangeri</span>
+              </p>
+              <p className="text-luxury-stone text-[11px] -mt-1 pl-7">Resort Manager</p>
               <p>
                 <a href="tel:+916304691625" className="hover:text-luxury-gold-light transition-colors">
                   +91 6304691625
@@ -69,10 +75,16 @@ export default function SiteFooter() {
             </p>
           </div>
         </div>
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-luxury-stone sm:flex-row">
-          <p>© {new Date().getFullYear()} Aurum Retreats. All rights reserved.</p>
+        <div className="mt-12 flex flex-col items-center gap-3 border-t border-white/10 pt-8 text-xs text-luxury-stone text-center sm:flex-row sm:justify-between sm:text-left">
+          <p>© {new Date().getFullYear()} Moinabad Farmstays. All rights reserved.</p>
+          <p className="text-luxury-stone/60">
+            Managed by{" "}
+            <a href="tel:+916304691625" className="font-semibold text-luxury-gold/80 hover:text-luxury-gold-light transition-colors">
+              Jagan Sangeri
+            </a>
+          </p>
           <Link href="/terms" className="hover:text-luxury-gold-light transition-colors">
-            Terms & Privacy
+            Terms &amp; Privacy
           </Link>
         </div>
       </div>

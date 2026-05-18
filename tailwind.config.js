@@ -34,6 +34,16 @@ module.exports = {
         "hero-overlay":
           "linear-gradient(to bottom, rgba(10,10,10,0.45) 0%, rgba(10,10,10,0.75) 100%)",
       },
+      keyframes: {
+        "ping-slow": {
+          "0%":   { transform: "scale(1)",    opacity: "0.5" },
+          "70%":  { transform: "scale(1.08)", opacity: "0.15" },
+          "100%": { transform: "scale(1.12)", opacity: "0" },
+        },
+      },
+      animation: {
+        "ping-slow": "ping-slow 2.5s cubic-bezier(0, 0, 0.2, 1) infinite",
+      },
     },
   },
   plugins: [],
