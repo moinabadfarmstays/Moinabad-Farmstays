@@ -12,10 +12,9 @@ import { NextResponse } from "next/server";
 
 export async function GET(request) {
   const secret = new URL(request.url).searchParams.get("secret");
-  // Uses ADMIN_EMAIL as the migration passphrase (already set in Vercel)
-  const expected = process.env.ADMIN_EMAIL || process.env.ADMIN_MIGRATION_SECRET;
-  if (!expected || secret !== expected) {
-    return NextResponse.json({ message: "Unauthorized — pass ?secret=YOUR_ADMIN_EMAIL" }, { status: 401 });
+  // Simple one-time passphrase — delete this file after running the migration
+  if (secret !== "moinabad-migrate-2024") {
+    return NextResponse.json({ message: "Unauthorized — pass ?secret=moinabad-migrate-2024" }, { status: 401 });
   }
 
 
