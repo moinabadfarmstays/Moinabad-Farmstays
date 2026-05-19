@@ -12,9 +12,12 @@ import { NextResponse } from "next/server";
 
 export async function GET(request) {
   const secret = new URL(request.url).searchParams.get("secret");
-  if (secret !== process.env.ADMIN_MIGRATION_SECRET) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  // Uses ADMIN_EMAIL as the migration passphrase (already set in Vercel)
+  const expected = process.env.ADMIN_EMAIL || process.env.ADMIN_MIGRATION_SECRET;
+  if (!expected || secret !== expected) {
+    return NextResponse.json({ message: "Unauthorized — pass ?secret=YOUR_ADMIN_EMAIL" }, { status: 401 });
   }
+
 
   try {
     await connectToDatabase();
