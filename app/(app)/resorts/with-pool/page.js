@@ -2,7 +2,6 @@
  * app/(app)/resorts/with-pool/page.js
  * Target: "farmhouse with pool Moinabad", "resort with swimming pool near Hyderabad"
  */
-import { Suspense } from "react";
 import Link from "next/link";
 import connectToDatabase from "@/app/utils/configue/db";
 import productModel from "@/app/utils/models/productModel";

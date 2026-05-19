@@ -13,8 +13,9 @@
  *   - Client re-fetches /api/resorts/[slug] for real-time booking availability
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   MapPin, Check, AlertCircle, Star, Navigation, ChevronDown, ArrowLeft,
 } from "lucide-react";
@@ -394,9 +395,9 @@ export default function ResortDetailClient({ initialResort, slug }) {
           {/* SEO-visible breadcrumb (visual) */}
           <nav aria-label="Breadcrumb" className="mb-3 text-xs text-luxury-charcoal/50">
             <ol className="flex items-center gap-1.5">
-              <li><a href="/" className="hover:text-luxury-gold-dark transition-colors">Home</a></li>
+              <li><Link href="/" className="hover:text-luxury-gold-dark transition-colors">Home</Link></li>
               <li aria-hidden>/</li>
-              <li><a href="/resorts" className="hover:text-luxury-gold-dark transition-colors">Resorts</a></li>
+              <li><Link href="/resorts" className="hover:text-luxury-gold-dark transition-colors">Resorts</Link></li>
               <li aria-hidden>/</li>
               <li className="text-luxury-charcoal/80 font-medium truncate max-w-[200px]">{resortRoom.title}</li>
             </ol>
