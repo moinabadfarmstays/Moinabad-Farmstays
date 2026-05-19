@@ -1,37 +1,64 @@
 import connectToDatabase from "@/app/utils/configue/db";
 import productModel from "@/app/utils/models/productModel";
 
-export default async function sitemap() {
-  const baseUrl = "https://www.moinabadfarmstays.com";
+const BASE_URL = "https://www.moinabadfarmstays.com";
 
-  let products = [];
+// Static pages with fixed priorities
+const STATIC_PAGES = [
+  { url: BASE_URL,                              changeFrequency: "daily",   priority: 1.0 },
+  { url: `${BASE_URL}/resorts`,                 changeFrequency: "daily",   priority: 0.95 },
+  // SEO landing pages
+  { url: `${BASE_URL}/resorts/with-pool`,       changeFrequency: "weekly",  priority: 0.85 },
+  { url: `${BASE_URL}/resorts/for-events`,      changeFrequency: "weekly",  priority: 0.85 },
+  { url: `${BASE_URL}/resorts/corporate`,       changeFrequency: "weekly",  priority: 0.80 },
+  { url: `${BASE_URL}/resorts/family`,          changeFrequency: "weekly",  priority: 0.80 },
+  // Blog
+  { url: `${BASE_URL}/blog`,                    changeFrequency: "weekly",  priority: 0.75 },
+  // Legal
+  { url: `${BASE_URL}/terms`,                   changeFrequency: "yearly",  priority: 0.20 },
+];
+
+export default async function sitemap() {
+  let resortUrls = [];
+
   try {
     await connectToDatabase();
-    products = await productModel.find({}).select("_id updatedAt").lean();
+    const products = await productModel
+      .find({})
+      .select("slug _id updatedAt title profileImages images")
+      .lean();
+
+    resortUrls = products.map((product) => {
+      const slugOrId = product.slug || product._id.toString();
+      const primaryImage =
+        product.profileImages?.[0] || product.images?.[0];
+
+      const entry = {
+        url: `${BASE_URL}/resorts/${slugOrId}`,
+        lastModified: product.updatedAt || new Date(),
+        changeFrequency: "weekly",
+        priority: 0.88,
+      };
+
+      // Image sitemap extension (Google reads these for image indexing)
+      if (primaryImage) {
+        entry.images = [
+          {
+            url: primaryImage,
+            title: product.title,
+            caption: `${product.title} — Luxury farmhouse in Moinabad near Hyderabad`,
+          },
+        ];
+      }
+
+      return entry;
+    });
   } catch (error) {
-    console.error("Failed to fetch products for sitemap:", error);
+    console.error("Sitemap generation error:", error);
   }
 
-  const resortUrls = products.map((product) => ({
-    url: `${baseUrl}/detail/${product._id}`,
-    lastModified: product.updatedAt || new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  }));
-
   return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/resorts`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
+    ...STATIC_PAGES.map((p) => ({ ...p, lastModified: new Date() })),
     ...resortUrls,
   ];
 }

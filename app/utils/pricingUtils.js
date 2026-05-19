@@ -68,9 +68,10 @@ export function calculateTotal(dates, durationType, resort) {
   }
 
   // Multi-day: sum each night (always 24hr rate per night)
+  // ⚠️  Loop ends BEFORE checkout day — you don't stay the last night
   let total = 0;
   const cursor = new Date(start);
-  while (cursor <= end) {
+  while (cursor < end) {
     total += nightRate(cursor, pricing, "24hr");
     cursor.setDate(cursor.getDate() + 1);
   }
@@ -80,11 +81,14 @@ export function calculateTotal(dates, durationType, resort) {
 /**
  * Count the number of nights in a date range.
  * Same-day = 1.
+ * Multi-day: May 20 → May 21 = 1 night (not 2)
  */
 export function getNights(dates) {
   if (!dates?.startDate || !dates?.endDate) return 0;
   const start = new Date(dates.startDate);
   const end   = new Date(dates.endDate);
   if (start.toDateString() === end.toDateString()) return 1;
-  return Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+  // Number of nights = number of days between start and end (exclusive end)
+  return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
 }
+
