@@ -9,9 +9,9 @@ import productModel from "@/app/utils/models/productModel";
 const BASE_URL = "https://www.moinabadfarmstays.com";
 
 export const metadata = {
-  title: "Family Resorts & Farmhouses near Hyderabad | Moinabad Farmstays",
+  title: "Family Farmhouses in Moinabad | Weekend Getaways",
   description:
-    "Plan the perfect family outing near Hyderabad. Spacious farmhouses in Moinabad with pools, lawns, and kid-friendly amenities. Safe, private, and just 45 min from the city.",
+    "Plan the perfect family weekend getaway near Hyderabad. Spacious farmhouses in Moinabad with pools, lawns, and safe, kid-friendly amenities.",
   keywords: [
     "family resort near Hyderabad", "family farmhouse Moinabad",
     "family outing near Hyderabad", "family trip Moinabad",
@@ -20,7 +20,7 @@ export const metadata = {
   ],
   alternates: { canonical: `${BASE_URL}/resorts/family` },
   openGraph: {
-    title: "Family Resorts & Farmhouses near Hyderabad",
+    title: "Family Farmhouses in Moinabad | Weekend Getaways",
     description: "Spacious family farmhouses in Moinabad near Hyderabad with pools and lawns.",
     url: `${BASE_URL}/resorts/family`,
     type: "website",

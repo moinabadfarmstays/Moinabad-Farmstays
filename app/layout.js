@@ -91,10 +91,6 @@ export const metadata = {
   verification: {
     google: "7p4ybX1dhk7JGjOmXniWgJhssAGKW0LPZKgze3bCwck",
   },
-
-  alternates: {
-    canonical: BASE_URL,
-  },
 };
 
 // ── Global JSON-LD: Organization + WebSite (SearchAction) ─────────────────────

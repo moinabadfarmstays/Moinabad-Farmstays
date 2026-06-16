@@ -7,18 +7,18 @@ import productModel from "@/app/utils/models/productModel";
 const BASE_URL = "https://www.moinabadfarmstays.com";
 
 export const metadata = {
-  title: "All Resorts in Moinabad | Luxury Farmhouses near Hyderabad",
+  title: "Farmhouses in Moinabad | Resort Listings & Bookings",
   description:
-    "Browse all luxury farmhouses and resorts in Moinabad near Hyderabad. Filter by amenities, availability and price. Book your perfect weekend getaway in Telangana — direct, no middlemen.",
+    "Browse luxury farmhouses and resorts in Moinabad. Filter by amenities, private pools, and price. Book your perfect farmhouse for rent in Moinabad directly.",
   keywords: [
-    "resorts in Moinabad", "farmhouses in Moinabad", "Moinabad resort list",
+    "Farmhouses in Moinabad", "Farmhouse for Rent in Moinabad", "Moinabad resort list",
     "luxury farmhouse Hyderabad", "weekend getaway resorts Telangana",
-    "farm stay near Hyderabad", "book farmhouse Moinabad",
+    "book farmhouse Moinabad",
   ],
   alternates: { canonical: `${BASE_URL}/resorts` },
   openGraph: {
-    title: "All Resorts in Moinabad | Moinabad Farmstays",
-    description: "Explore premium farmhouses and resorts in Moinabad. Compare amenities and book directly.",
+    title: "Farmhouses in Moinabad | Resort Listings & Bookings",
+    description: "Browse luxury farmhouses and resorts in Moinabad. Filter by amenities, private pools, and price. Book your perfect farmhouse for rent in Moinabad directly.",
     url: `${BASE_URL}/resorts`,
     type: "website",
   },

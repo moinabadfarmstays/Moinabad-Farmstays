@@ -11,19 +11,18 @@ const OG_IMAGE =
   "https://res.cloudinary.com/dstypxe4o/image/upload/q_auto/f_auto/v1776322013/WhatsApp_Image_2026-04-16_at_12.13.51_PM_tystat.jpg";
 
 export const metadata = {
-  title: "Moinabad Farmstays | Luxury Resorts & Farmhouses near Hyderabad",
+  title: "Best Farmhouses in Moinabad | Pool Party & Resort Bookings Near Hyderabad",
   description:
-    "Book luxury farmhouses and resorts in Moinabad, 45 min from Hyderabad. Premium farm stays in Telangana for weekend getaways, family outings & corporate retreats.",
+    "Book premium farmhouses in Moinabad for pool parties, corporate events, family outings, birthday celebrations, and weekend stays near Hyderabad.",
   keywords: [
-    "Moinabad resorts", "resorts in Moinabad", "farmhouse in Moinabad",
-    "farm stay near Hyderabad", "luxury resorts near Hyderabad",
-    "weekend getaway Telangana", "family resort Hyderabad",
+    "Farmhouses in Moinabad", "Farmhouse for Rent in Moinabad", "Pool Party Farmhouse Hyderabad",
+    "Luxury Farmhouse Hyderabad", "Corporate Event Farmhouse Hyderabad", "Family Farmhouses in Moinabad",
   ],
   alternates: { canonical: BASE_URL },
   openGraph: {
-    title: "Moinabad Farmstays | Luxury Resorts near Hyderabad",
+    title: "Best Farmhouses in Moinabad | Pool Party & Resort Bookings",
     description:
-      "Premium farm stays in Moinabad, Telangana. Book your perfect weekend getaway, family outing, or corporate retreat.",
+      "Book premium farmhouses in Moinabad for pool parties, corporate events, family outings, birthday celebrations, and weekend stays near Hyderabad.",
     url: BASE_URL,
     images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Moinabad Farmstays luxury pool resort" }],
   },

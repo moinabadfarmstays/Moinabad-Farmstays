@@ -9,9 +9,9 @@ import productModel from "@/app/utils/models/productModel";
 const BASE_URL = "https://www.moinabadfarmstays.com";
 
 export const metadata = {
-  title: "Corporate Team Outing Farmhouses near Hyderabad | Moinabad Farmstays",
+  title: "Corporate Event Farmhouses in Hyderabad & Moinabad",
   description:
-    "Book premium farmhouses and resorts for corporate team outings near Hyderabad. Private venues in Moinabad with lawns, pools, and catering for team building and offsites.",
+    "Book premium farmhouses and resorts for corporate team outings and events near Hyderabad. Private venues in Moinabad with lawns, pools, and catering.",
   keywords: [
     "corporate outing farmhouse Hyderabad", "team outing resort near Hyderabad",
     "corporate team outing Moinabad", "office outing resort Hyderabad",
@@ -19,7 +19,7 @@ export const metadata = {
   ],
   alternates: { canonical: `${BASE_URL}/resorts/corporate` },
   openGraph: {
-    title: "Corporate Team Outing Farmhouses near Hyderabad",
+    title: "Corporate Event Farmhouses in Hyderabad & Moinabad",
     description: "Private farmhouses in Moinabad for corporate offsites and team outings.",
     url: `${BASE_URL}/resorts/corporate`,
     type: "website",

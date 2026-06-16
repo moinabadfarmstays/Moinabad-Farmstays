@@ -42,13 +42,7 @@ export default async function sitemap() {
 
       // Image sitemap extension (Google reads these for image indexing)
       if (primaryImage) {
-        entry.images = [
-          {
-            url: primaryImage,
-            title: product.title,
-            caption: `${product.title} — Luxury farmhouse in Moinabad near Hyderabad`,
-          },
-        ];
+        entry.images = [primaryImage];
       }
 
       return entry;

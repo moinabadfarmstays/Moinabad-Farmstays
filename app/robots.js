@@ -8,15 +8,15 @@ export default function robots() {
         allow: "/",
         disallow: [
           "/admin/",
-          "/api/",                          // Block all API routes
+          "/api/",
           "/login",
           "/registration",
-          "/user/",                         // User profile/bookings — private
+          "/user/",
+          "/dashboard/",
           "/login-required/",
         ],
       },
       {
-        // Block GPTBot and AI scrapers from crawling booking data
         userAgent: "GPTBot",
         disallow: ["/"],
       },

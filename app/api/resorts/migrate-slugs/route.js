@@ -1,39 +1,67 @@
 /**
  * app/api/resorts/migrate-slugs/route.js
  *
- * ONE-TIME migration script: generates slugs for all existing resorts.
- * Hit GET /api/resorts/migrate-slugs?secret=YOUR_ADMIN_SECRET once after deploy.
- * Delete this file (or add auth guard) afterwards.
+ * ONE-TIME migration: generates slugs for all existing resorts.
+ * Uses direct updateOne() to bypass the pre-save hook (avoids bundler issues).
+ * DELETE this file after running the migration.
  */
 
+import { NextResponse } from "next/server";
 import connectToDatabase from "@/app/utils/configue/db";
 import productModel from "@/app/utils/models/productModel";
-import { NextResponse } from "next/server";
+
+// Inline slug generator — no external import, safe from bundler mangling
+function makeSlug(text) {
+  if (!text) return "";
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/[\s_]+/g, "-")       // spaces/underscores → hyphen
+    .replace(/[^\w-]+/g, "")       // remove non-word chars
+    .replace(/--+/g, "-")          // collapse multiple hyphens
+    .replace(/^-+|-+$/g, "");      // trim leading/trailing hyphens
+}
 
 export async function GET(request) {
   const secret = new URL(request.url).searchParams.get("secret");
-  // Simple one-time passphrase — delete this file after running the migration
   if (secret !== "moinabad-migrate-2024") {
-    return NextResponse.json({ message: "Unauthorized — pass ?secret=moinabad-migrate-2024" }, { status: 401 });
+    return NextResponse.json(
+      { message: "Unauthorized — pass ?secret=moinabad-migrate-2024" },
+      { status: 401 }
+    );
   }
-
 
   try {
     await connectToDatabase();
 
-    // Find all products missing a slug
-    const products = await productModel.find({ slug: { $in: [null, undefined, ""] } });
+    // Fetch all products without a slug
+    const products = await productModel
+      .find({ $or: [{ slug: { $exists: false } }, { slug: null }, { slug: "" }] })
+      .select("_id title")
+      .lean();
+
     const results = [];
 
     for (const product of products) {
-      // Trigger the pre-save hook by marking title as modified
-      product.markModified("title");
-      await product.save();
-      results.push({ id: product._id, title: product.title, slug: product.slug });
+      let slug = makeSlug(product.title);
+
+      // Ensure uniqueness: append short id suffix if slug already exists
+      const existing = await productModel.findOne({ slug });
+      if (existing && existing._id.toString() !== product._id.toString()) {
+        slug = `${slug}-${product._id.toString().slice(-4)}`;
+      }
+
+      await productModel.updateOne(
+        { _id: product._id },
+        { $set: { slug } }
+      );
+
+      results.push({ id: product._id, title: product.title, slug });
     }
 
     return NextResponse.json({
-      message: `Migrated ${results.length} resorts`,
+      message: `✅ Migrated ${results.length} resort${results.length !== 1 ? "s" : ""}`,
       results,
     });
   } catch (error) {

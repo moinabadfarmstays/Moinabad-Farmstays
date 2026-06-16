@@ -9,9 +9,9 @@ import productModel from "@/app/utils/models/productModel";
 const BASE_URL = "https://www.moinabadfarmstays.com";
 
 export const metadata = {
-  title: "Farmhouses with Swimming Pool in Moinabad | Moinabad Farmstays",
+  title: "Pool Party Farmhouses in Moinabad | Private Pool Resorts",
   description:
-    "Book luxury farmhouses with private swimming pools in Moinabad near Hyderabad. Perfect for families, couples, and group getaways. Check availability and book directly.",
+    "Book luxury farmhouses with private swimming pools in Moinabad near Hyderabad. Perfect for pool parties, families, couples, and group getaways.",
   keywords: [
     "farmhouse with pool Moinabad", "resort with swimming pool near Hyderabad",
     "private pool farmhouse Telangana", "pool resort Moinabad",
@@ -19,7 +19,7 @@ export const metadata = {
   ],
   alternates: { canonical: `${BASE_URL}/resorts/with-pool` },
   openGraph: {
-    title: "Farmhouses with Swimming Pool in Moinabad",
+    title: "Pool Party Farmhouses in Moinabad | Private Pool Resorts",
     description: "Luxury pool farmhouses in Moinabad near Hyderabad. Book directly for best rates.",
     url: `${BASE_URL}/resorts/with-pool`,
     type: "website",
