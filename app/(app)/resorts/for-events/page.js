@@ -5,8 +5,11 @@
 import Link from "next/link";
 import connectToDatabase from "@/app/utils/configue/db";
 import productModel from "@/app/utils/models/productModel";
+import SiteLayout from "@/app/components/layout/SiteLayout";
 
 const BASE_URL = "https://www.moinabadfarmstays.com";
+const OG_IMAGE =
+  "https://res.cloudinary.com/dstypxe4o/image/upload/q_auto/f_auto/v1776322013/WhatsApp_Image_2026-04-16_at_12.13.51_PM_tystat.jpg";
 
 export const metadata = {
   title: "Event Venues & Party Farmhouses in Moinabad | Moinabad Farmstays",
@@ -24,8 +27,15 @@ export const metadata = {
     description: "Birthday parties, anniversaries, get-togethers — book a private farmhouse in Moinabad.",
     url: `${BASE_URL}/resorts/for-events`,
     type: "website",
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Event and party venue farmhouse in Moinabad" }],
   },
 };
+
+const FAQ_ITEMS = [
+  { q: "Can I book a Moinabad farmhouse for a birthday party?", a: "Yes! All our Moinabad farmhouses can be booked for birthday parties. Private lawns, pools, and outdoor spaces are available. Contact us for decoration and catering arrangements." },
+  { q: "What is the minimum booking duration for events?", a: "We offer 12-hour day packages (ideal for parties) and 24-hour overnight stays. For large events, multi-day bookings are available." },
+  { q: "Do you allow outside catering at the farmhouses?", a: "Yes, outside catering and decoration are allowed at our Moinabad farmhouses. Please inform the manager in advance when booking." },
+];
 
 async function getAllResorts() {
   try {
@@ -78,18 +88,28 @@ export default async function ForEventsPage() {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: [
-      { "@type": "Question", name: "Can I book a Moinabad farmhouse for a birthday party?", acceptedAnswer: { "@type": "Answer", text: "Yes! All our Moinabad farmhouses can be booked for birthday parties. Private lawns, pools, and outdoor spaces are available. Contact us for decoration and catering arrangements." }},
-      { "@type": "Question", name: "What is the minimum booking duration for events?", acceptedAnswer: { "@type": "Answer", text: "We offer 12-hour day packages (ideal for parties) and 24-hour overnight stays. For large events, multi-day bookings are available." }},
-      { "@type": "Question", name: "Do you allow outside catering at the farmhouses?", acceptedAnswer: { "@type": "Answer", text: "Yes, outside catering and decoration are allowed at our Moinabad farmhouses. Please inform the manager in advance when booking." }},
-    ],
+    mainEntity: FAQ_ITEMS.map(({ q, a }) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Event Venues & Party Farmhouses in Moinabad | Moinabad Farmstays",
+    description: "Book farmhouses and resort venues in Moinabad for birthday parties, anniversaries, get-togethers and events.",
+    url: `${BASE_URL}/resorts/for-events`,
+    isPartOf: { "@type": "WebSite", name: "Moinabad Farmstays", url: BASE_URL },
   };
 
   return (
-    <>
+    <SiteLayout>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c") }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema).replace(/</g, "\\u003c") }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema).replace(/</g, "\\u003c") }} />
 
       <div className="min-h-screen bg-luxury-cream">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -171,11 +191,7 @@ export default async function ForEventsPage() {
           {/* FAQ section */}
           <div className="mt-12 space-y-4">
             <h2 className="font-display text-2xl font-bold text-luxury-black mb-6">Event FAQ</h2>
-            {[
-              { q: "Can I book a Moinabad farmhouse for a birthday party?", a: "Yes! All our Moinabad farmhouses can be booked for birthday parties. Private lawns, pools, and outdoor spaces are available. Contact us for decoration and catering arrangements." },
-              { q: "What is the minimum booking duration for events?", a: "We offer 12-hour day packages (ideal for parties) and 24-hour overnight stays. For large events, multi-day bookings are available." },
-              { q: "Do you allow outside catering at the farmhouses?", a: "Yes, outside catering and decoration are allowed at our Moinabad farmhouses. Please inform the manager in advance when booking." },
-            ].map(({ q, a }) => (
+            {FAQ_ITEMS.map(({ q, a }) => (
               <div key={q} className="rounded-2xl border border-luxury-stone/60 bg-white/95 p-5">
                 <h3 className="font-bold text-luxury-black mb-2">{q}</h3>
                 <p className="text-sm text-luxury-charcoal/70">{a}</p>
@@ -184,6 +200,6 @@ export default async function ForEventsPage() {
           </div>
         </div>
       </div>
-    </>
+    </SiteLayout>
   );
 }

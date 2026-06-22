@@ -37,6 +37,8 @@ export default function SiteFooter() {
               <li><Link href="/resorts/for-events" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Event Venues</Link></li>
               <li><Link href="/resorts/corporate" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Corporate Outings</Link></li>
               <li><Link href="/resorts/family" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Family Resorts</Link></li>
+              <li><Link href="/about" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">About Us</Link></li>
+              <li><Link href="/contact" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Contact</Link></li>
               <li><Link href="/blog" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Travel Blog</Link></li>
             </ul>
           </div>

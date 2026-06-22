@@ -72,10 +72,21 @@ export const metadata = {
     title: "Moinabad Farmstays | Luxury Farmhouses near Hyderabad",
     description: "Premium farm stays in Moinabad, Telangana. Book your perfect weekend getaway.",
     images: [OG_IMAGE],
-    creator: "@moinabadfarmstays",
-    site: "@moinabadfarmstays",
   },
 
+  alternates: {
+    canonical: BASE_URL,
+    languages: {
+      "en-IN": BASE_URL,
+    },
+  },
+
+  icons: {
+    icon: "/icon.jpg",
+    apple: "/icon.jpg",
+  },
+
+  manifest: "/manifest.json",
   robots: {
     index: true,
     follow: true,

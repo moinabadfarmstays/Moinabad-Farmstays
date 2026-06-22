@@ -5,8 +5,11 @@
 import Link from "next/link";
 import connectToDatabase from "@/app/utils/configue/db";
 import productModel from "@/app/utils/models/productModel";
+import SiteLayout from "@/app/components/layout/SiteLayout";
 
 const BASE_URL = "https://www.moinabadfarmstays.com";
+const OG_IMAGE =
+  "https://res.cloudinary.com/dstypxe4o/image/upload/q_auto/f_auto/v1776322013/WhatsApp_Image_2026-04-16_at_12.13.51_PM_tystat.jpg";
 
 export const metadata = {
   title: "Pool Party Farmhouses in Moinabad | Private Pool Resorts",
@@ -23,8 +26,15 @@ export const metadata = {
     description: "Luxury pool farmhouses in Moinabad near Hyderabad. Book directly for best rates.",
     url: `${BASE_URL}/resorts/with-pool`,
     type: "website",
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Pool farmhouse in Moinabad near Hyderabad" }],
   },
 };
+
+const FAQ_ITEMS = [
+  { q: "Do all Moinabad farmhouses have private pools?", a: "Not all, but several of our Moinabad farmhouses feature private swimming pools exclusively for your group. These are listed on this page." },
+  { q: "Can I book a pool farmhouse for a day outing?", a: "Yes! We offer 12-hour day packages and 24-hour overnight stays at our pool farmhouses near Hyderabad." },
+  { q: "How far are the pool resorts from Hyderabad?", a: "Our Moinabad pool farmhouses are 35\u201345 minutes from Hyderabad via the ORR, making them ideal for same-day outings." },
+];
 
 async function getPoolResorts() {
   try {
@@ -72,10 +82,31 @@ export default async function WithPoolPage() {
     })),
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ_ITEMS.map(({ q, a }) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Pool Party Farmhouses in Moinabad | Private Pool Resorts",
+    description: "Book luxury farmhouses with private swimming pools in Moinabad near Hyderabad.",
+    url: `${BASE_URL}/resorts/with-pool`,
+    isPartOf: { "@type": "WebSite", name: "Moinabad Farmstays", url: BASE_URL },
+  };
+
   return (
-    <>
+    <SiteLayout>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c") }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema).replace(/</g, "\\u003c") }} />
 
       <div className="min-h-screen bg-luxury-cream">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -147,11 +178,7 @@ export default async function WithPoolPage() {
           {/* FAQ section — triggers FAQ rich snippets */}
           <div className="mt-16 space-y-4">
             <h2 className="font-display text-2xl font-bold text-luxury-black mb-6">Frequently Asked Questions</h2>
-            {[
-              { q: "Do all Moinabad farmhouses have private pools?", a: "Not all, but several of our Moinabad farmhouses feature private swimming pools exclusively for your group. These are listed on this page." },
-              { q: "Can I book a pool farmhouse for a day outing?", a: "Yes! We offer 12-hour day packages and 24-hour overnight stays at our pool farmhouses near Hyderabad." },
-              { q: "How far are the pool resorts from Hyderabad?", a: "Our Moinabad pool farmhouses are 35–45 minutes from Hyderabad via the ORR, making them ideal for same-day outings." },
-            ].map(({ q, a }) => (
+            {FAQ_ITEMS.map(({ q, a }) => (
               <div key={q} className="rounded-2xl border border-luxury-stone/60 bg-white/95 p-5">
                 <h3 className="font-bold text-luxury-black mb-2">{q}</h3>
                 <p className="text-sm text-luxury-charcoal/70">{a}</p>
@@ -160,6 +187,6 @@ export default async function WithPoolPage() {
           </div>
         </div>
       </div>
-    </>
+    </SiteLayout>
   );
 }

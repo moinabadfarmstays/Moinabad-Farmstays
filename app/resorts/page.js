@@ -3,6 +3,7 @@ import ResortListing from "../components/ResortListing";
 import { ResortCardSkeleton } from "../components/ui/Skeleton";
 import connectToDatabase from "@/app/utils/configue/db";
 import productModel from "@/app/utils/models/productModel";
+import SiteLayout from "../components/layout/SiteLayout";
 
 const BASE_URL = "https://www.moinabadfarmstays.com";
 
@@ -53,7 +54,8 @@ async function getResortsForSchema() {
 }
 
 export default async function ResortsPage({ searchParams }) {
-  const q = searchParams?.q || "";
+  const resolvedSearchParams = await searchParams;
+  const q = resolvedSearchParams?.q || "";
   const resorts = await getResortsForSchema();
 
   // Breadcrumb schema
@@ -95,7 +97,7 @@ export default async function ResortsPage({ searchParams }) {
   };
 
   return (
-    <>
+    <SiteLayout>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -117,7 +119,7 @@ export default async function ResortsPage({ searchParams }) {
       <Suspense fallback={<ListingFallback />}>
         <ResortListing initialSearch={q} />
       </Suspense>
-    </>
+    </SiteLayout>
   );
 }
 

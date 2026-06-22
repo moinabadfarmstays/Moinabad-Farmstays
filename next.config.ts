@@ -45,12 +45,32 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // SEO-critical: tell Google the canonical host
-        source: "/(.*)",
+        // SEO-critical: tell Google the canonical host.
+        // Excludes /admin and /api — those should never be indexed.
+        source: "/((?!admin|api).*)",
         headers: [
           {
             key: "X-Robots-Tag",
             value: "index, follow, max-image-preview:large, max-snippet:-1",
+          },
+        ],
+      },
+      {
+        // Block indexing of the admin dashboard and API routes
+        source: "/admin/:path*",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "noindex, nofollow",
+          },
+        ],
+      },
+      {
+        source: "/api/:path*",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "noindex, nofollow",
           },
         ],
       },

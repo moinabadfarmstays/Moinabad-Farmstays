@@ -5,8 +5,11 @@
 import Link from "next/link";
 import connectToDatabase from "@/app/utils/configue/db";
 import productModel from "@/app/utils/models/productModel";
+import SiteLayout from "@/app/components/layout/SiteLayout";
 
 const BASE_URL = "https://www.moinabadfarmstays.com";
+const OG_IMAGE =
+  "https://res.cloudinary.com/dstypxe4o/image/upload/q_auto/f_auto/v1776322013/WhatsApp_Image_2026-04-16_at_12.13.51_PM_tystat.jpg";
 
 export const metadata = {
   title: "Corporate Event Farmhouses in Hyderabad & Moinabad",
@@ -23,8 +26,15 @@ export const metadata = {
     description: "Private farmhouses in Moinabad for corporate offsites and team outings.",
     url: `${BASE_URL}/resorts/corporate`,
     type: "website",
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Corporate retreat farmhouse near Hyderabad" }],
   },
 };
+
+const FAQ_ITEMS = [
+  { q: "How many people can these farmhouses accommodate for corporate outings?", a: "Our Moinabad farmhouses can accommodate teams of 10 to 100+ people. Larger groups may book multiple properties. Contact us for group arrangements." },
+  { q: "Are Moinabad farmhouses good for corporate team building?", a: "Yes! The private lawns, pools, and serene environment of Moinabad farmhouses make them ideal for team building activities, strategy sessions, and corporate celebrations." },
+  { q: "What is the distance from Hyderabad tech parks to Moinabad?", a: "Moinabad is approximately 35\u201350 minutes from Hitech City, Gachibowli, and Kondapur via the ORR. It's one of the closest nature retreats for Hyderabad IT teams." },
+];
 
 async function getAllResorts() {
   try {
@@ -59,9 +69,30 @@ export default async function CorporatePage() {
     ],
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ_ITEMS.map(({ q, a }) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Corporate Event Farmhouses in Hyderabad & Moinabad",
+    description: "Book premium farmhouses and resorts for corporate team outings and events near Hyderabad.",
+    url: `${BASE_URL}/resorts/corporate`,
+    isPartOf: { "@type": "WebSite", name: "Moinabad Farmstays", url: BASE_URL },
+  };
+
   return (
-    <>
+    <SiteLayout>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema).replace(/</g, "\\u003c") }} />
 
       <div className="min-h-screen bg-luxury-cream">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -142,11 +173,7 @@ export default async function CorporatePage() {
           {/* FAQ */}
           <div className="mt-12 space-y-4">
             <h2 className="font-display text-2xl font-bold text-luxury-black mb-6">Corporate Outing FAQ</h2>
-            {[
-              { q: "How many people can these farmhouses accommodate for corporate outings?", a: "Our Moinabad farmhouses can accommodate teams of 10 to 100+ people. Larger groups may book multiple properties. Contact us for group arrangements." },
-              { q: "Are Moinabad farmhouses good for corporate team building?", a: "Yes! The private lawns, pools, and serene environment of Moinabad farmhouses make them ideal for team building activities, strategy sessions, and corporate celebrations." },
-              { q: "What is the distance from Hyderabad tech parks to Moinabad?", a: "Moinabad is approximately 35–50 minutes from Hitech City, Gachibowli, and Kondapur via the ORR. It's one of the closest nature retreats for Hyderabad IT teams." },
-            ].map(({ q, a }) => (
+            {FAQ_ITEMS.map(({ q, a }) => (
               <div key={q} className="rounded-2xl border border-luxury-stone/60 bg-white/95 p-5">
                 <h3 className="font-bold text-luxury-black mb-2">{q}</h3>
                 <p className="text-sm text-luxury-charcoal/70">{a}</p>
@@ -155,6 +182,6 @@ export default async function CorporatePage() {
           </div>
         </div>
       </div>
-    </>
+    </SiteLayout>
   );
 }

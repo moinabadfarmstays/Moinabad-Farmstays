@@ -3,6 +3,9 @@ import productModel from "@/app/utils/models/productModel";
 
 const BASE_URL = "https://www.moinabadfarmstays.com";
 
+// Fixed baseline date — update this when static page content is meaningfully changed.
+const STATIC_LAST_MODIFIED = new Date("2026-06-16");
+
 // Static pages with fixed priorities
 const STATIC_PAGES = [
   { url: BASE_URL,                              changeFrequency: "daily",   priority: 1.0 },
@@ -12,6 +15,9 @@ const STATIC_PAGES = [
   { url: `${BASE_URL}/resorts/for-events`,      changeFrequency: "weekly",  priority: 0.85 },
   { url: `${BASE_URL}/resorts/corporate`,       changeFrequency: "weekly",  priority: 0.80 },
   { url: `${BASE_URL}/resorts/family`,          changeFrequency: "weekly",  priority: 0.80 },
+  // Trust / company pages
+  { url: `${BASE_URL}/about`,                   changeFrequency: "monthly", priority: 0.60 },
+  { url: `${BASE_URL}/contact`,                 changeFrequency: "monthly", priority: 0.65 },
   // Blog
   { url: `${BASE_URL}/blog`,                    changeFrequency: "weekly",  priority: 0.75 },
   // Legal
@@ -35,7 +41,7 @@ export default async function sitemap() {
 
       const entry = {
         url: `${BASE_URL}/resorts/${slugOrId}`,
-        lastModified: product.updatedAt || new Date(),
+        lastModified: product.updatedAt || STATIC_LAST_MODIFIED,
         changeFrequency: "weekly",
         priority: 0.88,
       };
@@ -52,7 +58,7 @@ export default async function sitemap() {
   }
 
   return [
-    ...STATIC_PAGES.map((p) => ({ ...p, lastModified: new Date() })),
+    ...STATIC_PAGES.map((p) => ({ ...p, lastModified: STATIC_LAST_MODIFIED })),
     ...resortUrls,
   ];
 }

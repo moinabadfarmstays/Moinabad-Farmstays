@@ -5,8 +5,11 @@
 import Link from "next/link";
 import connectToDatabase from "@/app/utils/configue/db";
 import productModel from "@/app/utils/models/productModel";
+import SiteLayout from "@/app/components/layout/SiteLayout";
 
 const BASE_URL = "https://www.moinabadfarmstays.com";
+const OG_IMAGE =
+  "https://res.cloudinary.com/dstypxe4o/image/upload/q_auto/f_auto/v1776322013/WhatsApp_Image_2026-04-16_at_12.13.51_PM_tystat.jpg";
 
 export const metadata = {
   title: "Family Farmhouses in Moinabad | Weekend Getaways",
@@ -24,6 +27,7 @@ export const metadata = {
     description: "Spacious family farmhouses in Moinabad near Hyderabad with pools and lawns.",
     url: `${BASE_URL}/resorts/family`,
     type: "website",
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Family farmhouse getaway near Hyderabad" }],
   },
 };
 
@@ -47,6 +51,12 @@ const FAMILY_HIGHLIGHTS = [
   { icon: "🍳", text: "Kitchen & BBQ facilities" },
 ];
 
+const FAQ_ITEMS = [
+  { q: "Are Moinabad farmhouses safe for families with children?", a: "Yes. All our Moinabad farmhouses are private, gated properties, making them safe and secure for families with children. Pools are supervised and enclosed." },
+  { q: "What is the best time for a family outing to Moinabad?", a: "October to March is the ideal season for a family trip to Moinabad due to pleasant weather. Weekday bookings are more affordable and less crowded." },
+  { q: "Can families with elderly members visit Moinabad farmhouses?", a: "Absolutely. Our farmhouses are accessible, with ground-floor rooms and sitting areas. Please mention any special requirements when booking so we can accommodate everyone." },
+];
+
 export default async function FamilyPage() {
   const resorts = await getAllResorts();
 
@@ -60,9 +70,30 @@ export default async function FamilyPage() {
     ],
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ_ITEMS.map(({ q, a }) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Family Farmhouses in Moinabad | Weekend Getaways",
+    description: "Plan the perfect family weekend getaway near Hyderabad with spacious farmhouses in Moinabad.",
+    url: `${BASE_URL}/resorts/family`,
+    isPartOf: { "@type": "WebSite", name: "Moinabad Farmstays", url: BASE_URL },
+  };
+
   return (
-    <>
+    <SiteLayout>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema).replace(/</g, "\\u003c") }} />
 
       <div className="min-h-screen bg-luxury-cream">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -143,11 +174,7 @@ export default async function FamilyPage() {
           {/* FAQ */}
           <div className="mt-14 space-y-4">
             <h2 className="font-display text-2xl font-bold text-luxury-black mb-6">Family Outing FAQ</h2>
-            {[
-              { q: "Are Moinabad farmhouses safe for families with children?", a: "Yes. All our Moinabad farmhouses are private, gated properties, making them safe and secure for families with children. Pools are supervised and enclosed." },
-              { q: "What is the best time for a family outing to Moinabad?", a: "October to March is the ideal season for a family trip to Moinabad due to pleasant weather. Weekday bookings are more affordable and less crowded." },
-              { q: "Can families with elderly members visit Moinabad farmhouses?", a: "Absolutely. Our farmhouses are accessible, with ground-floor rooms and sitting areas. Please mention any special requirements when booking so we can accommodate everyone." },
-            ].map(({ q, a }) => (
+            {FAQ_ITEMS.map(({ q, a }) => (
               <div key={q} className="rounded-2xl border border-luxury-stone/60 bg-white/95 p-5">
                 <h3 className="font-bold text-luxury-black mb-2">{q}</h3>
                 <p className="text-sm text-luxury-charcoal/70">{a}</p>
@@ -162,6 +189,6 @@ export default async function FamilyPage() {
           </div>
         </div>
       </div>
-    </>
+    </SiteLayout>
   );
 }

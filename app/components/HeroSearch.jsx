@@ -48,10 +48,10 @@ export default function HeroSearch({
             Luxury collection
           </p>
           <h1 className="mt-4 font-display text-4xl font-semibold leading-tight text-white text-balance sm:text-5xl lg:text-6xl">
-            Find Your Perfect Luxury Escape
+            Luxury Farmhouses in Moinabad near Hyderabad
           </h1>
           <p className="mt-5 max-w-xl text-lg text-white/85">
-            Handpicked resorts, intuitive booking, and service that anticipates every detail.
+            Book premium farmhouses and resorts in Moinabad, Telangana — 45 minutes from Hyderabad. Perfect for weekend getaways, family outings, and corporate retreats.
           </p>
         </motion.div>
 

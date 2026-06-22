@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -67,7 +67,7 @@ const UserNavigation = ({ userName = "", isAdmin = false }) => {
             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl shadow-luxury ring-1 ring-luxury-gold/30 transition-transform duration-300 group-hover:scale-[1.02]">
               <Image
                 src="https://res.cloudinary.com/dstypxe4o/image/upload/q_auto/f_auto/v1776322013/WhatsApp_Image_2026-04-16_at_12.13.51_PM_tystat.jpg"
-                alt="Site Logo"
+                alt="Moinabad Farmstays — Luxury Farmhouses near Hyderabad"
                 fill
                 sizes="44px"
                 className="object-cover"
@@ -94,6 +94,12 @@ const UserNavigation = ({ userName = "", isAdmin = false }) => {
             </Link>
             <Link href="/user/bookings" className={linkClass("/user/bookings")}>
               Bookings
+            </Link>
+            <Link href="/about" className={linkClass("/about")}>
+              About
+            </Link>
+            <Link href="/contact" className={linkClass("/contact")}>
+              Contact
             </Link>
             {isAdmin && (
               <Link href="/admin" className={linkClass("/admin")}>
@@ -235,10 +241,27 @@ const UserNavigation = ({ userName = "", isAdmin = false }) => {
                 <Phone className="h-5 w-5 text-luxury-gold-dark" />
                 Call resort
               </a>
-              <div className="flex items-center gap-3 rounded-xl px-4 py-3">
+              <a
+                href="mailto:moinabadfarmstays@gmail.com"
+                className="flex items-center gap-3 rounded-xl px-4 py-3 text-luxury-charcoal hover:bg-luxury-sand"
+              >
                 <Mail className="h-5 w-5 text-luxury-gold-dark" />
-                <span className="text-sm">info@holidayresort.com</span>
-              </div>
+                <span className="text-sm">moinabadfarmstays@gmail.com</span>
+              </a>
+              <Link
+                href="/about"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`rounded-xl px-4 py-3 ${linkClass("/about")}`}
+              >
+                About
+              </Link>
+              <Link
+                href="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`rounded-xl px-4 py-3 ${linkClass("/contact")}`}
+              >
+                Contact
+              </Link>
               {userName ? (
                 <Link
                   href="/api/auth/signout"

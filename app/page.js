@@ -113,12 +113,8 @@ export default async function HomePage() {
       postalCode: "501401",
       addressCountry: "IN",
     },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: "17.2637",
-      longitude: "77.9890",
-    },
-    hasMap: "https://maps.app.goo.gl/Moinabad",
+    hasMap: "https://www.google.com/maps/search/?api=1&query=Moinabad+Farmstays+Moinabad+Telangana",
+    openingHours: ["Mo-Fr 09:00-21:00", "Sa-Su 08:00-22:00"],
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",

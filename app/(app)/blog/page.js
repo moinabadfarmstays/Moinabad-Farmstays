@@ -95,8 +95,13 @@ function PostCard({ post, isPlaceholder = false }) {
   return (
     <article className="group flex flex-col rounded-2xl border border-luxury-stone/70 bg-white/95 overflow-hidden shadow-sm hover:shadow-luxury transition-all duration-300 hover:-translate-y-1">
       {/* Cover image placeholder */}
-      <div className="h-48 bg-gradient-to-br from-luxury-sand via-luxury-gold/10 to-luxury-cream flex items-center justify-center">
+      <div className="relative h-48 bg-gradient-to-br from-luxury-sand via-luxury-gold/10 to-luxury-cream flex items-center justify-center">
         <span className="text-4xl">🌿</span>
+        {isPlaceholder && (
+          <span className="absolute right-3 top-3 rounded-full bg-luxury-black/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-luxury-gold-light">
+            Coming Soon
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col flex-1 p-6">
@@ -115,7 +120,11 @@ function PostCard({ post, isPlaceholder = false }) {
         )}
 
         <h2 className="mb-2 font-display text-lg font-bold text-luxury-black leading-snug group-hover:text-luxury-gold-dark transition-colors">
-          <Link href={href}>{post.title}</Link>
+          {isPlaceholder ? (
+            <span>{post.title}</span>
+          ) : (
+            <Link href={href}>{post.title}</Link>
+          )}
         </h2>
 
         <p className="mb-4 text-sm leading-relaxed text-luxury-charcoal/70 flex-1">
@@ -126,6 +135,15 @@ function PostCard({ post, isPlaceholder = false }) {
           {date && <span>{date}</span>}
           <span>{post.readingTime} min read</span>
         </div>
+
+        {isPlaceholder && (
+          <Link
+            href={href}
+            className="mt-4 text-sm font-semibold text-luxury-gold-dark hover:underline"
+          >
+            Browse resorts in the meantime →
+          </Link>
+        )}
       </div>
     </article>
   );
@@ -136,7 +154,8 @@ export default async function BlogIndexPage() {
   const displayPosts = posts.length > 0 ? posts : PLACEHOLDER_POSTS;
   const isPlaceholder = posts.length === 0;
 
-  // Blog list schema
+  // Blog list schema — only include real posts; placeholder slugs don't
+  // exist as routes yet and would 404, so we must not claim them in schema.
   const blogListSchema = {
     "@context": "https://schema.org",
     "@type": "Blog",
@@ -149,14 +168,18 @@ export default async function BlogIndexPage() {
       name: "Moinabad Farmstays",
       url: BASE_URL,
     },
-    blogPost: displayPosts.slice(0, 5).map((post) => ({
-      "@type": "BlogPosting",
-      headline: post.title,
-      description: post.excerpt,
-      url: `${BASE_URL}/blog/${post.slug}`,
-      datePublished: post.createdAt || new Date().toISOString(),
-      author: { "@type": "Person", name: post.author || "Jagan Sangeri" },
-    })),
+    ...(isPlaceholder
+      ? {}
+      : {
+          blogPost: displayPosts.slice(0, 5).map((post) => ({
+            "@type": "BlogPosting",
+            headline: post.title,
+            description: post.excerpt,
+            url: `${BASE_URL}/blog/${post.slug}`,
+            datePublished: post.createdAt || new Date().toISOString(),
+            author: { "@type": "Person", name: post.author || "Jagan Sangeri" },
+          })),
+        }),
   };
 
   const breadcrumbSchema = {

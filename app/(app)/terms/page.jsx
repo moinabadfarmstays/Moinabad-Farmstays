@@ -1,4 +1,14 @@
-﻿import SiteLayout from "@/app/components/layout/SiteLayout";
+import SiteLayout from "@/app/components/layout/SiteLayout";
+
+const BASE_URL = "https://www.moinabadfarmstays.com";
+
+export const metadata = {
+  title: "Terms & Privacy Policy | Moinabad Farmstays",
+  description:
+    "Privacy policy and terms of use for Moinabad Farmstays, covering data collection, account deletion, and booking terms for our farmhouses near Hyderabad.",
+  alternates: { canonical: `${BASE_URL}/terms` },
+  robots: { index: false, follow: true },
+};
 
 const Terms = () => {
   return (
@@ -77,21 +87,21 @@ const Terms = () => {
             Consent
           </h2>
           <p className="mb-6 text-luxury-charcoal/85">
-            By using MaaBooking, you agree to this policy.
+            By using Moinabad Farmstays, you agree to this policy.
           </p>
 
           <h2 className="mb-4 font-display text-xl font-semibold text-luxury-black sm:text-2xl">
             Governing Law
           </h2>
           <p className="mb-6 text-luxury-charcoal/85">
-            This policy is governed by Indian laws, subject to Arbitration and Conciliation Act, Sole Arbitrator to be appointed by the MaaBooking, and Arbitration proceedings to be conducted in Ranga Reddy District, Hyderabad, Telangana State.
+            This policy is governed by Indian laws, subject to Arbitration and Conciliation Act, Sole Arbitrator to be appointed by Moinabad Farmstays, and Arbitration proceedings to be conducted in Ranga Reddy District, Hyderabad, Telangana State.
           </p>
 
           <h2 className="mb-4 font-display text-xl font-semibold text-luxury-black sm:text-2xl">
             Account Deletion
           </h2>
           <p className="mb-6 text-luxury-charcoal/85">
-            To request the deletion of your account and all associated data, please send an email to contact@maabooking.com. We will process your request in accordance with our privacy policy and applicable data protection regulations.
+            To request the deletion of your account and all associated data, please send an email to moinabadfarmstays@gmail.com. We will process your request in accordance with our privacy policy and applicable data protection regulations.
           </p>
 
           <h2 className="mb-4 font-display text-xl font-semibold text-luxury-black sm:text-2xl">
@@ -101,10 +111,10 @@ const Terms = () => {
             <strong>Easy Minds Services Pvt. Ltd.</strong>
           </p>
           <p className="mb-2 text-luxury-charcoal/85">
-            <strong>Mobile:</strong> 7674040033
+            <strong>Mobile:</strong> +91 6304691625
           </p>
           <p className="text-luxury-charcoal/85">
-            <strong>Email:</strong> Contact@maabooking.com
+            <strong>Email:</strong> moinabadfarmstays@gmail.com
           </p>
         </div>
       </div>
