@@ -50,14 +50,16 @@ export default function AboutPage() {
 
   const localBusinessSchema = {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "@id": `${BASE_URL}/about#localbusiness`,
+    "@type": ["LocalBusiness", "LodgingBusiness"],
+    "@id": `${BASE_URL}/#localbusiness`,
     name: "Moinabad Farmstays",
     description:
-      "Moinabad Farmstays manages a curated collection of luxury farmhouses in Moinabad, Telangana, near Hyderabad — for weekend getaways, family outings, and corporate retreats.",
-    url: `${BASE_URL}/about`,
+      "Moinabad Farmstays manages a curated collection of luxury farmhouses in Moinabad, Rangareddy District, Telangana, near Hyderabad — for weekend getaways, family outings, corporate retreats, birthday parties, and group stays.",
+    url: BASE_URL,
     telephone: "+916304691625",
     email: "moinabadfarmstays@gmail.com",
+    priceRange: "₹₹₹",
+    image: OG_IMAGE,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Moinabad",
@@ -65,6 +67,18 @@ export default function AboutPage() {
       postalCode: "501401",
       addressCountry: "IN",
     },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: "17.2982",
+      longitude: "78.2316",
+    },
+    hasMap: "https://www.google.com/maps/search/?api=1&query=Moinabad+Farmstays+Moinabad+Telangana",
+    areaServed: [
+      { "@type": "City", name: "Hyderabad" },
+      { "@type": "AdministrativeArea", name: "Rangareddy District" },
+      { "@type": "State", name: "Telangana" },
+    ],
+    openingHours: ["Mo-Fr 09:00-21:00", "Sa-Su 08:00-22:00"],
     parentOrganization: {
       "@type": "Organization",
       name: "Easy Minds Services Pvt. Ltd.",
@@ -73,6 +87,9 @@ export default function AboutPage() {
       "@type": "Person",
       name: "Jagan Sangeri",
       jobTitle: "Resort Manager",
+      telephone: "+916304691625",
+      email: "moinabadfarmstays@gmail.com",
+      worksFor: { "@type": "Organization", name: "Moinabad Farmstays" },
     },
     sameAs: [
       "https://www.instagram.com/moinabadfarmstays",
@@ -80,10 +97,30 @@ export default function AboutPage() {
     ],
   };
 
+  // Person schema for Jagan — standalone E-E-A-T signal
+  const personSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `${BASE_URL}/#jagan-sangeri`,
+    name: "Jagan Sangeri",
+    jobTitle: "Resort Manager & Co-founder",
+    worksFor: { "@type": "Organization", "@id": `${BASE_URL}/#organization`, name: "Moinabad Farmstays" },
+    telephone: "+916304691625",
+    email: "moinabadfarmstays@gmail.com",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Moinabad",
+      addressRegion: "Telangana",
+      addressCountry: "IN",
+    },
+    knowsAbout: ["Farmhouse Management", "Hospitality", "Event Planning", "Moinabad", "Hyderabad Tourism"],
+  };
+
   return (
     <SiteLayout>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c") }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema).replace(/</g, "\\u003c") }} />
 
       <div className="min-h-screen bg-luxury-cream">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">

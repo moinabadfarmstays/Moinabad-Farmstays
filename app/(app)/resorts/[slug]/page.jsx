@@ -17,6 +17,7 @@ import connectToDatabase from "@/app/utils/configue/db";
 import productModel from "@/app/utils/models/productModel";
 import ResortDetailClient from "./_client/ResortDetailClient";
 import { ResortDetailSkeleton } from "@/app/components/ui/Skeleton";
+import SiteLayout from "@/app/components/layout/SiteLayout";
 import mongoose from "mongoose";
 
 const BASE_URL = "https://www.moinabadfarmstays.com";
@@ -351,7 +352,7 @@ export default async function ResortDetailPage({ params }) {
   // (next.config.ts handles 301 for /detail/[id] globally)
 
   return (
-    <>
+    <SiteLayout>
       {/* Structured Data — read by Google at render time */}
       <script
         type="application/ld+json"
@@ -373,7 +374,7 @@ export default async function ResortDetailPage({ params }) {
           slug={slug}
         />
       </Suspense>
-    </>
+    </SiteLayout>
   );
 }
 

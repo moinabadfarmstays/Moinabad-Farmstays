@@ -4,7 +4,7 @@ import productModel from "@/app/utils/models/productModel";
 const BASE_URL = "https://www.moinabadfarmstays.com";
 
 // Fixed baseline date — update this when static page content is meaningfully changed.
-const STATIC_LAST_MODIFIED = new Date("2026-06-16");
+const STATIC_LAST_MODIFIED = new Date("2026-06-23");
 
 // Static pages with fixed priorities
 const STATIC_PAGES = [
@@ -27,6 +27,18 @@ const STATIC_PAGES = [
   { url: `${BASE_URL}/terms`,                   changeFrequency: "yearly",  priority: 0.20 },
 ];
 
+// ── Safely extract a plain string URL from whatever shape Cloudinary
+//    data takes in MongoDB: could be a bare string, { url }, { secure_url },
+//    or { src }. Returns null if nothing usable is found.
+function resolveImageUrl(raw) {
+  if (!raw) return null;
+  if (typeof raw === "string") return raw;
+  if (typeof raw === "object") {
+    return raw.url || raw.secure_url || raw.src || null;
+  }
+  return null;
+}
+
 export default async function sitemap() {
   let resortUrls = [];
 
@@ -39,8 +51,10 @@ export default async function sitemap() {
 
     resortUrls = products.map((product) => {
       const slugOrId = product.slug || product._id.toString();
-      const primaryImage =
-        product.profileImages?.[0] || product.images?.[0];
+
+      // Resolve the primary image URL — handles string or object from DB
+      const rawImage = product.profileImages?.[0] ?? product.images?.[0];
+      const imageUrl  = resolveImageUrl(rawImage);
 
       const entry = {
         url: `${BASE_URL}/resorts/${slugOrId}`,
@@ -49,12 +63,12 @@ export default async function sitemap() {
         priority: 0.88,
       };
 
-      // Image sitemap extension (Google reads loc/title/caption for image indexing)
-      if (primaryImage) {
+      // Only add the image block when we have a real, usable URL string
+      if (imageUrl) {
         entry.images = [
           {
-            loc: primaryImage,
-            title: product.title,
+            loc:     imageUrl,
+            title:   product.title,
             caption: `${product.title} — farmhouse in Moinabad near Hyderabad, Telangana`,
           },
         ];
