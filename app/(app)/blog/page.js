@@ -3,6 +3,7 @@
  * Target keywords: "Moinabad resort guide", "farmhouse near Hyderabad tips", "weekend getaway Hyderabad blog"
  */
 import Link from "next/link";
+import SiteLayout from "@/app/components/layout/SiteLayout";
 import connectToDatabase from "@/app/utils/configue/db";
 import blogModel from "@/app/utils/models/blogModel";
 
@@ -192,7 +193,7 @@ export default async function BlogIndexPage() {
   };
 
   return (
-    <>
+    <SiteLayout>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogListSchema).replace(/</g, "\\u003c") }}
@@ -257,6 +258,6 @@ export default async function BlogIndexPage() {
           </div>
         </div>
       </div>
-    </>
+    </SiteLayout>
   );
 }

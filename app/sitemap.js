@@ -15,6 +15,9 @@ const STATIC_PAGES = [
   { url: `${BASE_URL}/resorts/for-events`,      changeFrequency: "weekly",  priority: 0.85 },
   { url: `${BASE_URL}/resorts/corporate`,       changeFrequency: "weekly",  priority: 0.80 },
   { url: `${BASE_URL}/resorts/family`,          changeFrequency: "weekly",  priority: 0.80 },
+  { url: `${BASE_URL}/resorts/birthday`,        changeFrequency: "weekly",  priority: 0.85 },
+  { url: `${BASE_URL}/resorts/weekend`,         changeFrequency: "weekly",  priority: 0.82 },
+  { url: `${BASE_URL}/resorts/bachelor`,        changeFrequency: "weekly",  priority: 0.78 },
   // Trust / company pages
   { url: `${BASE_URL}/about`,                   changeFrequency: "monthly", priority: 0.60 },
   { url: `${BASE_URL}/contact`,                 changeFrequency: "monthly", priority: 0.65 },
@@ -46,9 +49,15 @@ export default async function sitemap() {
         priority: 0.88,
       };
 
-      // Image sitemap extension (Google reads these for image indexing)
+      // Image sitemap extension (Google reads loc/title/caption for image indexing)
       if (primaryImage) {
-        entry.images = [primaryImage];
+        entry.images = [
+          {
+            loc: primaryImage,
+            title: product.title,
+            caption: `${product.title} — farmhouse in Moinabad near Hyderabad, Telangana`,
+          },
+        ];
       }
 
       return entry;

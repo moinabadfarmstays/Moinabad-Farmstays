@@ -29,30 +29,40 @@ export const metadata = {
 };
 
 // ─── FAQ data — these exact Q&As trigger Google FAQ rich snippets ─────────────
+// Answers are deliberately 3–5 sentences with entity-rich language to maximise
+// the chance of being cited verbatim in Google AI Overviews and Perplexity.
 const FAQ_ITEMS = [
   {
     q: "Where is Moinabad Farmstays located?",
-    a: "Moinabad Farmstays is located in Moinabad, Rangareddy District, Telangana — approximately 35–45 minutes from Hyderabad city center via the ORR.",
+    a: "Moinabad Farmstays is located in Moinabad, Rangareddy District, Telangana — approximately 35–45 minutes from Hyderabad city center via the Outer Ring Road (ORR). The farmhouses are situated in a quiet, green countryside setting away from city noise. From Gachibowli and Hitech City, the drive is around 32–38 km. From Jubilee Hills and Banjara Hills, expect 40–50 minutes. Moinabad is one of the closest private nature retreat destinations from Hyderabad.",
   },
   {
     q: "How do I book a farmhouse at Moinabad Farmstays?",
-    a: "You can book directly on our website moinabadfarmstays.com. Select your resort, choose your dates, and submit a booking request. Our manager Jagan will confirm within a few hours via WhatsApp.",
+    a: "You can book a farmhouse directly on our website moinabadfarmstays.com — browse the available resorts, choose your preferred property, and submit a booking request. Alternatively, WhatsApp or call Jagan Sangeri at +91 6304691625 for the fastest confirmation. Booking requests are typically confirmed within a few hours. An advance payment is required to secure the booking. Direct booking ensures the best rates with no intermediary fees.",
   },
   {
-    q: "What is the price range for resorts in Moinabad?",
-    a: "Our farmhouses start from ₹5,000 per night for weekday bookings. Weekend and full-day rates vary by property. All prices include amenities like AC, pool access, and lawn.",
+    q: "What is the price range for farmhouses in Moinabad?",
+    a: "Farmhouses at Moinabad Farmstays are priced from ₹5,000 per night for weekday bookings and from ₹8,000 for weekend bookings, depending on the property size and amenities. 12-hour day packages start from ₹4,000 and are ideal for day outings, birthday parties, and corporate events. All prices include amenities such as AC, private swimming pool access, lawn, parking, and WiFi. Catering can be arranged as an additional add-on. Contact Jagan at +91 6304691625 for current pricing on specific properties.",
   },
   {
-    q: "Do the resorts have swimming pools?",
-    a: "Yes, several of our Moinabad farmhouses feature private swimming pools. You can filter by amenity on our Resorts page to find pool-inclusive properties.",
+    q: "Do the farmhouses in Moinabad have private swimming pools?",
+    a: "Yes, several farmhouses at Moinabad Farmstays feature private swimming pools that are exclusively available to guests during their stay — there is no shared access with other guests. The pools are cleaned and maintained before each booking. Pool access is included in the standard booking price with no additional charges. Moinabad's warm climate makes the pool a highlight for both day visits and overnight stays. Browse our Private Pool Farmhouses page at moinabadfarmstays.com/resorts/with-pool to see pool-equipped properties.",
   },
   {
-    q: "Can I book for corporate team outings or events?",
-    a: "Absolutely. We cater to corporate team outings, birthday parties, anniversaries, and family get-togethers. Contact Jagan Sangeri at +91 6304691625 for group packages.",
+    q: "Can I book a Moinabad farmhouse for corporate team outings or events?",
+    a: "Yes, Moinabad Farmstays regularly hosts corporate team outings, strategy offsites, team-building events, and company celebrations. Our farmhouses in Moinabad, Rangareddy District can accommodate teams of 10 to 100+ people in a private, distraction-free environment 35–45 minutes from Hyderabad. Corporate packages include private use of the farmhouse, pool, lawn, and arrangements for catering, activities, and BBQ. Custom group pricing is available for teams of 15 or more. Contact Jagan Sangeri at +91 6304691625 or visit moinabadfarmstays.com/resorts/corporate for details.",
   },
   {
-    q: "What is the check-in and check-out time?",
-    a: "Standard check-in is 2:00 PM and check-out is 11:00 AM. For 12-hour day packages, timings may vary. Please confirm with the manager at the time of booking.",
+    q: "What is the check-in and check-out time at Moinabad Farmstays?",
+    a: "Standard check-in time at Moinabad Farmstays is 2:00 PM and check-out is 11:00 AM. For overnight stays, this provides approximately 21 hours of exclusive property access. For 12-hour day packages, check-in can be arranged from 9 AM to 10 AM with check-out by 9 PM to 10 PM — exact timings vary by property. Early check-in and late check-out may be available based on prior bookings. Please confirm timings with Jagan at the time of booking.",
+  },
+  {
+    q: "How far is Moinabad from Hyderabad?",
+    a: "Moinabad is located approximately 32–42 km from Hyderabad city center, making it a 35–45 minute drive via the Outer Ring Road (ORR). From Gachibowli and Hitech City, Moinabad is about 32–35 km. From the Hyderabad airport (Shamshabad), the drive is approximately 45–55 minutes. Moinabad falls within Rangareddy District, Telangana — one of the closest countryside destinations from Hyderabad for day outings and overnight farm stays.",
+  },
+  {
+    q: "What amenities are included at Moinabad farmhouses?",
+    a: "Moinabad Farmstays farmhouses include private swimming pools, spacious lawns, air-conditioned bedrooms, free high-speed WiFi, ample free parking, BBQ/bonfire facilities, and outdoor seating areas. Some properties include a fully equipped kitchen. All properties are booked exclusively — there are no shared spaces with other guests. Catering for events, group meals, and birthday parties can be arranged separately with advance notice. Contact Jagan at +91 6304691625 for a full amenity list for a specific property.",
   },
 ];
 
