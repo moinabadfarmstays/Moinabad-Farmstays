@@ -12,7 +12,7 @@
  */
 
 import { Suspense } from "react";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import connectToDatabase from "@/app/utils/configue/db";
 import productModel from "@/app/utils/models/productModel";
 import ResortDetailClient from "./_client/ResortDetailClient";
@@ -346,10 +346,13 @@ export default async function ResortDetailPage({ params }) {
 
   if (!resort) notFound();
 
-  const { resortSchema, breadcrumbSchema } = buildResortJsonLd(resort);
+  // 301: if the URL uses an ObjectId but the product now has a slug,
+  // redirect permanently so all link equity flows to the canonical slug URL.
+  if (resort.slug && slug !== resort.slug) {
+    redirect(`/resorts/${resort.slug}`);
+  }
 
-  // Redirect if accessed via old _id and slug exists
-  // (next.config.ts handles 301 for /detail/[id] globally)
+  const { resortSchema, breadcrumbSchema } = buildResortJsonLd(resort);
 
   return (
     <SiteLayout>

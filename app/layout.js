@@ -134,10 +134,20 @@ const organizationSchema = {
     postalCode: "501401",
     addressCountry: "IN",
   },
+  location: {
+    "@type": "Place",
+    name: "Moinabad Farmstays",
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 17.3314,
+      longitude: 78.2088,
+    },
+  },
   sameAs: [
     "https://www.instagram.com/moinabadfarmstays",
     "https://www.facebook.com/moinabadfarmstays",
     "https://g.page/moinabadfarmstays",
+    "https://www.google.com/maps/search/?api=1&query=Moinabad+Farmstays+Moinabad+Telangana",
   ],
 };
 

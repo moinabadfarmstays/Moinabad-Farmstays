@@ -5,6 +5,7 @@ import { MapPin, Star, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { getPricing } from "../../../../utils/pricingUtils";
+import { getResortPath } from "@/app/utils/resortUrl";
 
 function averageRating(reviews) {
   if (!reviews?.length) return null;
@@ -81,7 +82,7 @@ export default function SimilarResorts({ resorts }) {
               whileInView="visible"
               viewport={{ once: true, margin: "-30px" }}
               type="button"
-              onClick={() => router.push(`/detail/${resort._id}`)}
+              onClick={() => router.push(getResortPath(resort))}
               className="group snap-start flex-shrink-0 w-64 sm:w-72 overflow-hidden rounded-2xl border border-luxury-stone/70 bg-white shadow-glass text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-luxury hover:border-luxury-gold/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-luxury-gold flex flex-col"
             >
               {/* Image */}

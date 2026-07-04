@@ -22,6 +22,7 @@ import { ResortCardSkeleton } from "./ui/Skeleton";
 import Button from "./ui/Button";
 import { formatDate } from "../utils/formatDate";
 import { getPricing } from "../utils/pricingUtils";
+import { getResortPath } from "../utils/resortUrl";
 
 function averageRating(item) {
   if (!item.reviews?.length) return null;
@@ -72,7 +73,7 @@ const ResortCard = ({ item, featured = false }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
       className={`group h-full cursor-pointer ${featured ? "md:col-span-2" : ""}`}
-      onClick={() => router.push(`/detail/${item._id}`)}
+      onClick={() => router.push(getResortPath(item))}
     >
       <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-luxury-stone/70 bg-white/95 shadow-glass transition-all duration-300 hover:-translate-y-1 hover:shadow-luxury">
         <div
@@ -224,7 +225,7 @@ const ResortCard = ({ item, featured = false }) => {
                 className="px-5 py-2 text-sm"
                 onClick={(e) => {
                   e.stopPropagation();
-                  router.push(`/detail/${item._id}`);
+                  router.push(getResortPath(item));
                 }}
               >
                 Book Now

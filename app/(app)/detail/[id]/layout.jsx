@@ -18,16 +18,19 @@ export async function generateMetadata({ params }) {
     const description = product.desc?.substring(0, 160) || `Book ${product.title} in Moinabad for your next weekend getaway.`;
     const imageUrl = product.image || product.profileImages?.[0] || "";
 
+    const slugOrId = product.slug || id;
+    const canonicalPath = `/resorts/${slugOrId}`;
+
     return {
       title,
       description,
       alternates: {
-        canonical: `/detail/${id}`,
+        canonical: canonicalPath,
       },
       openGraph: {
         title,
         description,
-        url: `/detail/${id}`,
+        url: canonicalPath,
         images: imageUrl ? [{ url: imageUrl }] : [],
       },
       twitter: {
@@ -53,13 +56,14 @@ export default async function DetailLayout({ children, params }) {
     await connectToDatabase();
     const product = await productModel.findById(id).lean();
     if (product) {
+      const slugOrId = product.slug || id;
       const imageUrl = product.image || product.profileImages?.[0] || "";
       jsonLd = {
         "@context": "https://schema.org",
         "@type": "LodgingBusiness",
         "name": product.title,
         "description": product.desc,
-        "url": `https://www.moinabadfarmstays.com/detail/${id}`,
+        "url": `https://www.moinabadfarmstays.com/resorts/${slugOrId}`,
         "image": imageUrl,
         "address": {
           "@type": "PostalAddress",

@@ -23,10 +23,17 @@ const nextConfig: NextConfig = {
   // Google will transfer all link equity to the new /resorts/[slug] URLs
   async redirects() {
     return [
+      // Canonical host: always serve www
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "moinabadfarmstays.com" }],
+        destination: "https://www.moinabadfarmstays.com/:path*",
+        permanent: true,
+      },
       {
         source: "/detail/:id",
-        destination: "/resorts/:id",   // :id works as slug fallback (API handles both)
-        permanent: true,               // 301 — passes PageRank to new URL
+        destination: "/resorts/:id",
+        permanent: true,
       },
     ];
   },

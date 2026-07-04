@@ -7,6 +7,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { debounce } from "lodash";
+import { getResortPath } from "@/app/utils/resortUrl";
 
 const ProductCollectionBackend = () => {
   const [collection, setCollection] = useState([]);
@@ -337,7 +338,7 @@ const ProductCollectionBackend = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 {collection.map((item) => (
-                  <Link key={item._id} href={`/detail/${item._id}`} className="group">
+                  <Link key={item._id} href={getResortPath(item)} className="group">
                     <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
                       <div className="relative h-48 bg-gradient-to-br from-blue-400 to-purple-500 overflow-hidden">
                         <Image
