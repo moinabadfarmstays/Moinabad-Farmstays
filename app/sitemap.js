@@ -49,55 +49,70 @@ function extractImageUrls(product) {
     .slice(0, 5);
 }
 
+/** Prevent Google "Couldn't fetch" when MongoDB is slow on cold start. */
+function withTimeout(promise, ms = 8000) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Sitemap DB timeout")), ms)
+    ),
+  ]);
+}
+
+async function fetchDynamicUrls() {
+  await connectToDatabase();
+
+  const [products, blogs] = await Promise.all([
+    productModel
+      .find({ available: true })
+      .select("slug _id updatedAt title profileImages images image")
+      .lean(),
+    blogModel
+      .find({ published: true })
+      .select("slug updatedAt")
+      .lean(),
+  ]);
+
+  const resortUrls = products.map((product) => {
+    const slugOrId = product.slug || product._id.toString();
+    const imageUrls = extractImageUrls(product);
+
+    const entry = {
+      url: `${BASE_URL}/resorts/${slugOrId}`,
+      lastModified: product.updatedAt || STATIC_LAST_MODIFIED,
+      changeFrequency: "weekly",
+      priority: 0.88,
+    };
+
+    if (imageUrls.length > 0) {
+      entry.images = imageUrls;
+    }
+
+    return entry;
+  });
+
+  const blogUrls = blogs.map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: post.updatedAt || STATIC_LAST_MODIFIED,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return { resortUrls, blogUrls };
+}
+
 export default async function sitemap() {
-  let resortUrls = [];
-  let blogUrls = [];
+  const staticEntries = STATIC_PAGES.map((p) => ({
+    ...p,
+    lastModified: STATIC_LAST_MODIFIED,
+  }));
 
   try {
-    await connectToDatabase();
-
-    const [products, blogs] = await Promise.all([
-      productModel
-        .find({ available: true })
-        .select("slug _id updatedAt title profileImages images image")
-        .lean(),
-      blogModel
-        .find({ published: true })
-        .select("slug updatedAt")
-        .lean(),
-    ]);
-
-    resortUrls = products.map((product) => {
-      const slugOrId = product.slug || product._id.toString();
-      const imageUrls = extractImageUrls(product);
-
-      const entry = {
-        url: `${BASE_URL}/resorts/${slugOrId}`,
-        lastModified: product.updatedAt || STATIC_LAST_MODIFIED,
-        changeFrequency: "weekly",
-        priority: 0.88,
-      };
-
-      if (imageUrls.length > 0) {
-        entry.images = imageUrls;
-      }
-
-      return entry;
-    });
-
-    blogUrls = blogs.map((post) => ({
-      url: `${BASE_URL}/blog/${post.slug}`,
-      lastModified: post.updatedAt || STATIC_LAST_MODIFIED,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    }));
+    const { resortUrls, blogUrls } = await withTimeout(fetchDynamicUrls());
+    return [...staticEntries, ...resortUrls, ...blogUrls];
   } catch (error) {
     console.error("Sitemap generation error:", error);
+    // Always return at least static pages so Google never gets "Couldn't fetch"
+    return staticEntries;
   }
-
-  return [
-    ...STATIC_PAGES.map((p) => ({ ...p, lastModified: STATIC_LAST_MODIFIED })),
-    ...resortUrls,
-    ...blogUrls,
-  ];
 }
