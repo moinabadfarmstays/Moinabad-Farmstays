@@ -1,7 +1,6 @@
 import Link from "next/link";
 import connectToDatabase from "@/app/utils/configue/db";
 import productModel from "@/app/utils/models/productModel";
-import { HOME_FAQ_ITEMS } from "@/app/utils/homeFaq";
 import { getResortPath } from "@/app/utils/resortUrl";
 
 const CATEGORY_LINKS = [
@@ -38,28 +37,27 @@ export default async function HomeSeoSection() {
       className="border-t border-luxury-stone/60 bg-luxury-cream"
     >
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="max-w-3xl">
-          <h2 className="font-display text-3xl font-semibold text-luxury-black sm:text-4xl">
+        <div className="max-w-3xl animate-fade-up">
+          <span className="luxury-accent-line" />
+          <h2 className="mt-4 font-display text-3xl font-semibold text-luxury-black sm:text-4xl">
             Moinabad Farmstays — Luxury Farmhouses &amp; Resorts near Hyderabad
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-luxury-charcoal/80">
-            Welcome to <strong>Moinabad Farmstays</strong>, your trusted platform for booking
-            premium farmhouses and resorts in Moinabad, Telangana. Whether you are planning a
-            pool party, corporate outing, family weekend getaway, or birthday celebration, our
-            curated collection of private farm stays is just 45 minutes from Hyderabad.
-          </p>
         </div>
 
-        <nav aria-label="Farmhouse categories" className="mt-10">
+        <nav aria-label="Farmhouse categories" className="mt-10 animate-fade-up" style={{ animationDelay: "80ms" }}>
           <h3 className="text-xs font-semibold uppercase tracking-[0.25em] text-luxury-gold-dark">
             Browse by occasion
           </h3>
           <ul className="mt-4 flex flex-wrap gap-2">
-            {CATEGORY_LINKS.map(({ href, label }) => (
-              <li key={href}>
+            {CATEGORY_LINKS.map(({ href, label }, i) => (
+              <li
+                key={href}
+                className="animate-fade-up"
+                style={{ animationDelay: `${120 + i * 50}ms` }}
+              >
                 <Link
                   href={href}
-                  className="inline-block rounded-full border border-luxury-stone/80 bg-white px-4 py-2 text-sm text-luxury-charcoal transition-colors hover:border-luxury-gold/50 hover:text-luxury-gold-dark"
+                  className="inline-block rounded-full border border-luxury-stone/80 bg-white px-4 py-2 text-sm text-luxury-charcoal transition-all duration-300 hover:-translate-y-0.5 hover:border-luxury-gold/50 hover:bg-luxury-sand/50 hover:text-luxury-gold-dark hover:shadow-gold-glow"
                 >
                   {label}
                 </Link>
@@ -69,16 +67,20 @@ export default async function HomeSeoSection() {
         </nav>
 
         {resorts.length > 0 && (
-          <div className="mt-12">
+          <div className="mt-12 animate-fade-up" style={{ animationDelay: "200ms" }}>
             <h3 className="font-display text-2xl font-semibold text-luxury-black">
               Featured Farmhouses in Moinabad
             </h3>
             <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {resorts.map((resort) => (
-                <li key={resort._id.toString()}>
+              {resorts.map((resort, i) => (
+                <li
+                  key={resort._id.toString()}
+                  className="animate-fade-up"
+                  style={{ animationDelay: `${240 + i * 60}ms` }}
+                >
                   <Link
                     href={getResortPath(resort)}
-                    className="block rounded-xl border border-luxury-stone/70 bg-white/90 px-4 py-3 text-sm transition-colors hover:border-luxury-gold/40 hover:bg-luxury-sand/40"
+                    className="block rounded-xl border border-luxury-stone/70 bg-white/90 px-4 py-3 text-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-luxury-gold/40 hover:bg-luxury-sand/40 hover:shadow-card-hover"
                   >
                     <span className="font-semibold text-luxury-black">{resort.title}</span>
                     {resort.address && (
@@ -90,20 +92,6 @@ export default async function HomeSeoSection() {
             </ul>
           </div>
         )}
-
-        <div className="mt-14">
-          <h3 className="font-display text-2xl font-semibold text-luxury-black">
-            Frequently Asked Questions
-          </h3>
-          <dl className="mt-6 space-y-6">
-            {HOME_FAQ_ITEMS.map(({ q, a }) => (
-              <div key={q}>
-                <dt className="font-semibold text-luxury-black">{q}</dt>
-                <dd className="mt-2 text-sm leading-relaxed text-luxury-charcoal/80">{a}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
       </div>
     </section>
   );

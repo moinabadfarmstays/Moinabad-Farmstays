@@ -258,6 +258,38 @@
 
   .hover-lift       { transition: transform var(--t-base), box-shadow var(--t-base); }
   .hover-lift:hover { transform: translateY(-3px); box-shadow: var(--luxury-shadow-lg); }
+
+  .transition-smooth {
+    transition: all var(--t-base) cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .link-hover {
+    transition: color var(--t-fast), transform var(--t-fast);
+  }
+  .link-hover:hover {
+    transform: translateX(2px);
+  }
+
+  .animate-ken-burns {
+    animation: ken-burns 14s ease-out forwards;
+  }
+
+  .animate-fade-up {
+    animation: smooth-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-bounce-soft {
+    animation: bounce-soft 2s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hover-lift:hover { transform: none; }
+    .link-hover:hover { transform: none; }
+    .animate-ken-burns,
+    .animate-fade-up,
+    .animate-bounce-soft { animation: none; }
+    html { scroll-behavior: auto; }
+  }
 }
 
 /* ── Keyframes ───────────────────────────────────────────────────────────────── */
@@ -276,6 +308,14 @@
 @keyframes scale-in {
   from { opacity: 0; transform: scale(0.94); }
   to   { opacity: 1; transform: scale(1);    }
+}
+@keyframes ken-burns {
+  from { transform: scale(1.1); }
+  to   { transform: scale(1); }
+}
+@keyframes bounce-soft {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(5px); }
 }
 
 .animate-smooth-in { animation: smooth-in 0.35s ease both; }

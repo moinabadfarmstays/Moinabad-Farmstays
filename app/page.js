@@ -6,7 +6,6 @@ import HomeWithHero from "./components/HomeWithHero";
 import HomeSeoSection from "./components/HomeSeoSection";
 import connectToDatabase from "@/app/utils/configue/db";
 import productModel from "@/app/utils/models/productModel";
-import { HOME_FAQ_ITEMS } from "@/app/utils/homeFaq";
 
 const BASE_URL = "https://www.moinabadfarmstays.com";
 const OG_IMAGE =
@@ -130,29 +129,12 @@ export default async function HomePage() {
       : {}),
   };
 
-  // ── FAQPage schema ──────────────────────────────────────────────────────────
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: HOME_FAQ_ITEMS.map(({ q, a }) => ({
-      "@type": "Question",
-      name: q,
-      acceptedAnswer: { "@type": "Answer", text: a },
-    })),
-  };
-
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(resortSchema).replace(/</g, "\\u003c"),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqSchema).replace(/</g, "\\u003c"),
         }}
       />
       <SiteLayout>

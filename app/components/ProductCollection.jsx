@@ -30,7 +30,7 @@ function averageRating(item) {
   return sum / item.reviews.length;
 }
 
-const ResortCard = ({ item, featured = false }) => {
+const ResortCard = ({ item, featured = false, index = 0 }) => {
   const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -69,13 +69,13 @@ const ResortCard = ({ item, featured = false }) => {
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35 }}
+      transition={{ duration: 0.4, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
       className={`group h-full cursor-pointer ${featured ? "md:col-span-2" : ""}`}
       onClick={() => router.push(getResortPath(item))}
     >
-      <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-luxury-stone/70 bg-white/95 shadow-glass transition-all duration-300 hover:-translate-y-1 hover:shadow-luxury">
+      <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-luxury-stone/70 bg-white/95 shadow-glass transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-luxury-gold/25 hover:shadow-luxury">
         <div
           className={`relative ${imageHeight} overflow-hidden bg-luxury-charcoal group/slider`}
         >
@@ -800,7 +800,7 @@ const ProductCollection = ({
           <FeaturedCarousel items={featuredStrip} isFallback={isFeaturedFallback} />
         )}
 
-        <div className="mb-8">
+        <div className="mb-8 animate-fade-up">
           <h1 className="mb-2 font-display text-3xl font-semibold text-luxury-black sm:text-4xl">
             {title}
           </h1>
@@ -1121,8 +1121,8 @@ const ProductCollection = ({
                         More stays
                       </h3> */}
                       <div className={`grid grid-cols-1 gap-6 md:grid-cols-2 ${showFilters ? 'lg:grid-cols-2 xl:grid-cols-2' : 'lg:grid-cols-3 xl:grid-cols-3'}`}>
-                        {gridItems.map((item) => (
-                          <ResortCard key={item._id} item={item} />
+                        {gridItems.map((item, i) => (
+                          <ResortCard key={item._id} item={item} index={i} />
                         ))}
                       </div>
                     </div>

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Phone,
   Calendar,
@@ -201,9 +202,16 @@ const UserNavigation = ({ userName = "", isAdmin = false }) => {
           </div>
         </div>
 
-        {mobileMenuOpen && (
-          <div className="border-t border-luxury-stone/60 bg-luxury-cream/95 px-4 py-4 backdrop-blur-xl md:hidden">
-            <div className="flex flex-col gap-1">
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden border-t border-luxury-stone/60 bg-luxury-cream/95 backdrop-blur-xl md:hidden"
+            >
+              <div className="flex flex-col gap-1 px-4 py-4">
               <Link
                 href="/"
                 onClick={() => setMobileMenuOpen(false)}
@@ -282,8 +290,9 @@ const UserNavigation = ({ userName = "", isAdmin = false }) => {
                 </Link>
               )}
             </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
     </>
   );

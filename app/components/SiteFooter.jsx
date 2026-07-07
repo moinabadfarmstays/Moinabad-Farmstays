@@ -9,8 +9,8 @@ export default function SiteFooter() {
 
           {/* Brand */}
           <div>
-            <Link href="/" className="flex items-center gap-2">
-              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-luxury-gold/20 ring-1 ring-luxury-gold/40">
+            <Link href="/" className="group flex items-center gap-2 transition-transform duration-300 hover:translate-x-0.5">
+              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-luxury-gold/20 ring-1 ring-luxury-gold/40 transition-all duration-300 group-hover:bg-luxury-gold/30 group-hover:shadow-gold-glow">
                 <Sparkles className="h-5 w-5 text-luxury-gold-light" />
               </span>
               <span className="font-display text-lg font-semibold tracking-tight text-white">
@@ -31,18 +31,18 @@ export default function SiteFooter() {
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-luxury-gold">Explore</h3>
             <ul className="mt-4 space-y-2 text-sm">
-              <li><Link href="/" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Home</Link></li>
-              <li><Link href="/resorts" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">All Resorts</Link></li>
-              <li><Link href="/resorts/with-pool" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Resorts with Pool</Link></li>
-              <li><Link href="/resorts/for-events" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Event Venues</Link></li>
-              <li><Link href="/resorts/corporate" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Corporate Outings</Link></li>
-              <li><Link href="/resorts/family" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Family Resorts</Link></li>
-              <li><Link href="/resorts/birthday" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Birthday Venues</Link></li>
-              <li><Link href="/resorts/weekend" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Weekend Getaways</Link></li>
-              <li><Link href="/resorts/bachelor" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Bachelor Parties</Link></li>
-              <li><Link href="/about" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">About Us</Link></li>
-              <li><Link href="/contact" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Contact</Link></li>
-              <li><Link href="/blog" className="text-luxury-sand/90 hover:text-luxury-gold-light transition-colors">Travel Blog</Link></li>
+              <li><Link href="/" className="link-hover text-luxury-sand/90 hover:text-luxury-gold-light">Home</Link></li>
+              <li><Link href="/resorts" className="link-hover text-luxury-sand/90 hover:text-luxury-gold-light">All Resorts</Link></li>
+              <li><Link href="/resorts/with-pool" className="link-hover text-luxury-sand/90 hover:text-luxury-gold-light">Resorts with Pool</Link></li>
+              <li><Link href="/resorts/for-events" className="link-hover text-luxury-sand/90 hover:text-luxury-gold-light">Event Venues</Link></li>
+              <li><Link href="/resorts/corporate" className="link-hover text-luxury-sand/90 hover:text-luxury-gold-light">Corporate Outings</Link></li>
+              <li><Link href="/resorts/family" className="link-hover text-luxury-sand/90 hover:text-luxury-gold-light">Family Resorts</Link></li>
+              <li><Link href="/resorts/birthday" className="link-hover text-luxury-sand/90 hover:text-luxury-gold-light">Birthday Venues</Link></li>
+              <li><Link href="/resorts/weekend" className="link-hover text-luxury-sand/90 hover:text-luxury-gold-light">Weekend Getaways</Link></li>
+              <li><Link href="/resorts/bachelor" className="link-hover text-luxury-sand/90 hover:text-luxury-gold-light">Bachelor Parties</Link></li>
+              <li><Link href="/about" className="link-hover text-luxury-sand/90 hover:text-luxury-gold-light">About Us</Link></li>
+              <li><Link href="/contact" className="link-hover text-luxury-sand/90 hover:text-luxury-gold-light">Contact</Link></li>
+              <li><Link href="/blog" className="link-hover text-luxury-sand/90 hover:text-luxury-gold-light">Travel Blog</Link></li>
             </ul>
           </div>
 
@@ -74,7 +74,7 @@ export default function SiteFooter() {
                 href="https://wa.me/916304691625?text=Hi, I'd like to book a farmhouse at Moinabad Farmstays."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 px-4 py-2.5 text-xs font-bold text-white hover:scale-[1.03] transition-all"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 px-4 py-2.5 text-xs font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-emerald-900/30 active:scale-[0.98]"
               >
                 💬 WhatsApp to Book
               </a>
