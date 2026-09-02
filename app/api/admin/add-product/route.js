@@ -198,7 +198,14 @@ export async function POST(request) {
   } catch (error) {
     console.error("ADD PRODUCT ERROR:", error);
     return NextResponse.json(
-      { success: false, message: "Add product failed", error: error.message },
+      {
+        success: false,
+        message: "Add product failed",
+        error: error.message,
+        errorName: error.name,
+        // Stack hint: first line only (safe to expose, helps debugging)
+        hint: error.stack?.split("\n")?.[1]?.trim() || "no stack",
+      },
       { status: 500 }
     );
   }

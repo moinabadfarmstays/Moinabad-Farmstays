@@ -1,7 +1,7 @@
 "use client";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
@@ -30,6 +30,8 @@ const validationSchema = Yup.object({
 
 export default function RegisterPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "";
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [serverError, setServerError] = useState("");
@@ -63,7 +65,8 @@ export default function RegisterPage() {
           formik.resetForm();
 
           setTimeout(() => {
-            router.push("/login");
+            const loginPath = callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : "/login";
+            router.push(loginPath);
           }, 1500);
         } else {
           setServerError(data.message || "Registration failed");
@@ -328,7 +331,7 @@ export default function RegisterPage() {
 
           <div className="text-center">
             <Link
-              href="/login"
+              href={callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : "/login"}
               className="font-medium text-luxury-gold-dark transition hover:text-luxury-black hover:underline"
             >
               Sign in instead

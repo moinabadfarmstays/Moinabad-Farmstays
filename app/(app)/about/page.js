@@ -8,17 +8,17 @@ const OG_IMAGE =
 export const metadata = {
   title: "About Us | Moinabad Farmstays — Luxury Farmhouses near Hyderabad",
   description:
-    "Learn about Moinabad Farmstays, managed by Easy Minds Services Pvt. Ltd. Discover our story, our farmhouses in Moinabad, Telangana, and our commitment to memorable stays near Hyderabad.",
+    "Moinabad Farmstays is founded and personally run by Jagan Sangeri. Discover our curated collection of private farmhouses in Moinabad, Telangana — just 45 minutes from Hyderabad.",
   keywords: [
-    "about Moinabad Farmstays", "Easy Minds Services Pvt Ltd",
-    "farmhouse management Moinabad", "Jagan Sangeri Moinabad Farmstays",
+    "about Moinabad Farmstays", "Jagan Sangeri Moinabad Farmstays",
+    "farmhouse owner Moinabad", "owner-operated farm stay Telangana",
     "best farm stay in Telangana", "farm stay near Hyderabad",
   ],
   alternates: { canonical: `${BASE_URL}/about` },
   openGraph: {
     title: "About Us | Moinabad Farmstays",
     description:
-      "Managed by Easy Minds Services Pvt. Ltd. — discover the story behind Moinabad Farmstays and our luxury farmhouses near Hyderabad.",
+      "Founded and personally run by Jagan Sangeri — discover the story behind Moinabad Farmstays and our luxury farmhouses near Hyderabad.",
     url: `${BASE_URL}/about`,
     type: "website",
     images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Moinabad Farmstays — about our farmhouses near Hyderabad" }],
@@ -26,7 +26,7 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "About Us | Moinabad Farmstays",
-    description: "The story behind our luxury farmhouses in Moinabad, near Hyderabad.",
+    description: "The story behind our luxury farmhouses in Moinabad, near Hyderabad — founded and run by Jagan Sangeri.",
     images: [OG_IMAGE],
   },
 };
@@ -79,17 +79,12 @@ export default function AboutPage() {
       { "@type": "State", name: "Telangana" },
     ],
     openingHours: ["Mo-Fr 09:00-21:00", "Sa-Su 08:00-22:00"],
-    parentOrganization: {
-      "@type": "Organization",
-      name: "Easy Minds Services Pvt. Ltd.",
-    },
-    employee: {
+    founder: {
       "@type": "Person",
       name: "Jagan Sangeri",
-      jobTitle: "Resort Manager",
+      jobTitle: "Founder & Owner",
       telephone: "+916304691625",
       email: "moinabadfarmstays@gmail.com",
-      worksFor: { "@type": "Organization", name: "Moinabad Farmstays" },
     },
     sameAs: [
       "https://www.instagram.com/moinabadfarmstays",
@@ -103,7 +98,7 @@ export default function AboutPage() {
     "@type": "Person",
     "@id": `${BASE_URL}/#jagan-sangeri`,
     name: "Jagan Sangeri",
-    jobTitle: "Resort Manager & Co-founder",
+    jobTitle: "Founder & Owner",
     worksFor: { "@type": "Organization", "@id": `${BASE_URL}/#organization`, name: "Moinabad Farmstays" },
     telephone: "+916304691625",
     email: "moinabadfarmstays@gmail.com",
@@ -113,7 +108,7 @@ export default function AboutPage() {
       addressRegion: "Telangana",
       addressCountry: "IN",
     },
-    knowsAbout: ["Farmhouse Management", "Hospitality", "Event Planning", "Moinabad", "Hyderabad Tourism"],
+    knowsAbout: ["Farmhouse Ownership", "Hospitality", "Event Planning", "Moinabad", "Hyderabad Tourism"],
   };
 
   return (
@@ -150,14 +145,33 @@ export default function AboutPage() {
           <div className="luxury-surface mb-12 rounded-3xl border border-luxury-stone/60 bg-white/95 p-8 sm:p-10">
             <h2 className="mb-4 font-display text-2xl font-bold text-luxury-black">Who We Are</h2>
             <p className="mb-4 text-luxury-charcoal/85 leading-relaxed">
-              Moinabad Farmstays is managed by <strong>Easy Minds Services Pvt. Ltd.</strong>, a Telangana-based hospitality management company. We bring together a handpicked group of private farmhouses in and around Moinabad, in Rangareddy District, and manage every aspect of the guest experience — from your first booking enquiry to the day you check out.
+              Moinabad Farmstays is founded and personally owned by <strong>Jagan Sangeri</strong> — a Moinabad local who saw an opportunity to bring Hyderabad families closer to nature without the cost and distance of a full resort. This is not a corporate platform or a franchise; every property listed here is personally vetted, managed, and overseen by Jagan himself.
             </p>
             <p className="mb-4 text-luxury-charcoal/85 leading-relaxed">
               We started with a simple idea: Hyderabad residents needed a genuine escape from the city that didn&apos;t require a long drive or an expensive resort booking. Moinabad, just 35–45 minutes from Hyderabad via the Outer Ring Road, turned out to be the perfect answer — close enough for a same-day visit, far enough to feel like a different world.
             </p>
-            <p className="text-luxury-charcoal/85 leading-relaxed">
+            <p className="mb-6 text-luxury-charcoal/85 leading-relaxed">
               Today, our farmhouses host weekend getaways, family outings, birthday parties, corporate team retreats, and everything in between. Each property is privately owned, gated, and exclusively yours for the duration of your stay — no shared spaces, no other groups.
             </p>
+
+            {/* Owner-Operated Callout */}
+            <div className="rounded-2xl border border-luxury-gold/30 bg-luxury-gold/5 p-5">
+              <p className="mb-3 text-xs font-bold uppercase tracking-widest text-luxury-gold-dark">Owner-Operated — What This Means for You</p>
+              <ul className="space-y-2.5">
+                {[
+                  "You speak directly to the owner — no call centres, no middlemen, no automated bots.",
+                  "Jagan personally approves every booking and is available on call or WhatsApp for any query.",
+                  "Pricing decisions, availability, and property standards are all controlled by Jagan — not a company.",
+                  "Complaints, special requests, and custom arrangements are handled directly and immediately.",
+                  "There is no third-party management company involved in the day-to-day running of this platform.",
+                ].map((point, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-sm text-luxury-charcoal/80">
+                    <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-luxury-gold-dark" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           {/* Manager */}
@@ -168,9 +182,9 @@ export default function AboutPage() {
               </span>
               <div>
                 <h2 className="font-display text-xl font-bold text-luxury-black">Jagan Sangeri</h2>
-                <p className="mb-3 text-sm font-medium text-luxury-gold-dark">Resort Manager, Moinabad Farmstays</p>
+                <p className="mb-3 text-sm font-medium text-luxury-gold-dark">Founder & Owner, Moinabad Farmstays</p>
                 <p className="text-luxury-charcoal/80 leading-relaxed">
-                  Jagan personally oversees bookings, guest coordination, and on-ground arrangements for every farmhouse in our collection. If you call or WhatsApp us, Jagan is who you&apos;ll be speaking with — for everything from confirming dates to arranging catering for a corporate group.
+                  Jagan founded Moinabad Farmstays and personally owns and operates the entire platform. He oversees bookings, guest coordination, property standards, and on-ground arrangements for every farmhouse in the collection. When you call or WhatsApp, you&apos;re speaking directly with Jagan — for everything from confirming dates to arranging catering for a corporate group.
                 </p>
               </div>
             </div>

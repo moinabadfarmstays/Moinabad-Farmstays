@@ -19,7 +19,7 @@ const Terms = () => {
             Privacy Policy
           </h1>
           <p className="mb-6 text-luxury-charcoal/85">
-            At Moinabad Farmstays, managed by Easy Minds Services Pvt Ltd we value your privacy. This policy outlines how we collect, use, and protect your information.
+            At Moinabad Farmstays, founded and personally run by Jagan Sangeri, we value your privacy. This policy outlines how we collect, use, and protect your information.
           </p>
 
           <h2 className="mb-4 font-display text-xl font-semibold text-luxury-black sm:text-2xl">
@@ -108,7 +108,7 @@ const Terms = () => {
             Contact Us
           </h2>
           <p className="mb-4 text-luxury-charcoal/85">
-            <strong>Easy Minds Services Pvt. Ltd.</strong>
+            <strong>Jagan Sangeri</strong> — Founder &amp; Owner, Moinabad Farmstays
           </p>
           <p className="mb-2 text-luxury-charcoal/85">
             <strong>Mobile:</strong> +91 6304691625

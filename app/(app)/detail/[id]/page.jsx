@@ -284,6 +284,45 @@ const DynamicProduct = () => {
   useEffect(() => { dynamicProductHandler(); }, [dynamicProductHandler]);
   useEffect(() => { if (resortRoom) fetchSimilarResorts(resortRoom); }, [resortRoom, fetchSimilarResorts]);
 
+  // ── Restore draft booking from sessionStorage on mount/resortRoom load ──
+  useEffect(() => {
+    if (!resortRoom) return;
+    try {
+      const draftStr = sessionStorage.getItem("pending_booking");
+      if (draftStr) {
+        const draft = JSON.parse(draftStr);
+        if (draft && draft.resortId === resortRoom._id) {
+          if (draft.startDate && draft.endDate) {
+            const range = {
+              startDate: new Date(draft.startDate),
+              endDate: new Date(draft.endDate),
+              key: "selection",
+            };
+            setSelectedDates(range);
+            const amt = calculateTotal(range, draft.durationType || "12hr", resortRoom);
+            setTotalAmount(amt);
+
+            if (resortRoom.bookings?.length) {
+              const start = new Date(draft.startDate);
+              const end = new Date(draft.endDate);
+              const conflict = resortRoom.bookings.find((b) => {
+                if (b.status && b.status !== "approved") return false;
+                return start < new Date(b.endDate) && end > new Date(b.startDate);
+              });
+              setOverlappingBooking(conflict || null);
+            }
+          }
+          if (draft.numberOfPeople) setNumberOfPeople(draft.numberOfPeople);
+          if (draft.occasion) setOccasion(draft.occasion);
+          if (draft.durationType) setDurationType(draft.durationType);
+          if (draft.showCalendar) setShowCalendar(true);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to restore pending booking draft:", err);
+    }
+  }, [resortRoom]);
+
   // ── Derived ──
   const isSameDay =
     selectedDates?.startDate &&
@@ -328,7 +367,24 @@ const DynamicProduct = () => {
 
   const bookingHandler = async () => {
     const session = await getSession();
-    if (!session) { setShowLoginModal(true); return; }
+    if (!session) {
+      try {
+        const draft = {
+          resortId: resortRoom._id,
+          startDate: selectedDates?.startDate || null,
+          endDate: selectedDates?.endDate || null,
+          numberOfPeople,
+          occasion,
+          durationType,
+          showCalendar: true,
+        };
+        sessionStorage.setItem("pending_booking", JSON.stringify(draft));
+      } catch (err) {
+        console.error("Failed to save pending booking draft:", err);
+      }
+      setShowLoginModal(true);
+      return;
+    }
 
     // Gate: Google users need a phone number
     if (session.user?.provider === "google" || session.user?.image?.includes("googleusercontent")) {
@@ -374,11 +430,18 @@ const DynamicProduct = () => {
           price: totalAmount,
         }).catch((err) => console.error("Email API Error:", err));
 
+        // Clear pending booking from sessionStorage
+        try {
+          sessionStorage.removeItem("pending_booking");
+        } catch {}
+
         alert("Booking request submitted successfully!");
         setSelectedDates(null);
         setTotalAmount(0);
         setShowCalendar(false);
         setDurationType("12hr");
+        setOccasion("");
+        setNumberOfPeople(1);
       } else {
         alert(result.message || "Booking failed");
       }

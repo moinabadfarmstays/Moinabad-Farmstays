@@ -2,7 +2,7 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
@@ -18,6 +18,8 @@ const validationSchema = Yup.object({
 
 const UserLogin = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [serverError, setServerError] = useState("");
@@ -43,7 +45,7 @@ const UserLogin = () => {
         if (result?.ok) {
           setSuccess(true);
           setTimeout(() => {
-            router.push("/");
+            router.push(callbackUrl);
             router.refresh();
           }, 500);
         } else {
@@ -66,7 +68,7 @@ const UserLogin = () => {
   });
 
   const handleGoogleLogin = () => {
-    signIn("google", { callbackUrl: "/" });
+    signIn("google", { callbackUrl });
   };
 
   const inputClass = (touched, err) =>
@@ -240,7 +242,7 @@ const UserLogin = () => {
 
           <div className="text-center">
             <Link
-              href="/registration"
+              href={callbackUrl && callbackUrl !== "/" ? `/registration?callbackUrl=${encodeURIComponent(callbackUrl)}` : "/registration"}
               className="font-medium text-luxury-gold-dark transition hover:text-luxury-black hover:underline"
             >
               Create an account
