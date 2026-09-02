@@ -75,7 +75,7 @@ productSchema.pre("save", async function (next) {
 
   // Ensure uniqueness: keep incrementing suffix until no collision
   while (true) {
-    const conflict = await mongoose.models.Product.findOne({
+    const conflict = await this.constructor.findOne({
       slug: candidate,
       _id: { $ne: this._id },
     });
