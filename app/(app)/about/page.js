@@ -13,6 +13,9 @@ export const metadata = {
     "about Moinabad Farmstays", "Jagan Sangeri Moinabad Farmstays",
     "farmhouse owner Moinabad", "owner-operated farm stay Telangana",
     "best farm stay in Telangana", "farm stay near Hyderabad",
+    "luxury farmhouse in Moinabad", "private pool farmhouse Moinabad",
+    "weekend getaway near Hyderabad", "corporate outing farmhouses Hyderabad",
+    "family friendly resorts Moinabad", "Moinabad farmstays booking"
   ],
   alternates: { canonical: `${BASE_URL}/about` },
   openGraph: {
@@ -187,6 +190,19 @@ export default function AboutPage() {
                   Jagan founded Moinabad Farmstays and personally owns and operates the entire platform. He oversees bookings, guest coordination, property standards, and on-ground arrangements for every farmhouse in the collection. When you call or WhatsApp, you&apos;re speaking directly with Jagan — for everything from confirming dates to arranging catering for a corporate group.
                 </p>
               </div>
+            </div>
+          </div>
+
+          {/* Why Moinabad */}
+          <div className="mb-12">
+            <h2 className="mb-6 font-display text-2xl font-bold text-luxury-black">Why Choose Moinabad for Your Farmhouse Getaway?</h2>
+            <div className="rounded-3xl border border-luxury-stone/60 bg-white/95 p-8 sm:p-10 text-luxury-charcoal/85 leading-relaxed space-y-4 shadow-sm">
+              <p>
+                Located just a short drive from the bustling IT corridors of Gachibowli and Hitech City, Moinabad has emerged as the most sought-after destination for luxury farmhouses and private weekend getaways near Hyderabad. Its lush green landscapes, serene environment, and excellent connectivity via the Outer Ring Road (ORR) make it the perfect escape from the city.
+              </p>
+              <p>
+                Whether you are looking for a <strong>private pool farmhouse</strong> for a family vacation, a spacious venue for a <strong>corporate team outing</strong>, or a beautiful outdoor setting for a <strong>birthday party or private event</strong>, our properties in Moinabad offer the ideal blend of rustic charm and modern luxury amenities.
+              </p>
             </div>
           </div>
 
